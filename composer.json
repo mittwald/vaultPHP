@@ -2,7 +2,7 @@
     "name": "mittwald/vault-php",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "homepage": "https://www.mittwald.de/",
     "description": "PHP library for Vault",
     "require": {
