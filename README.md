@@ -1,11 +1,18 @@
 # PHP Hashicorp Vault Client
 
+![Tests](https://github.com/mittwald/vaultPHP/workflows/CI%20Tests/badge.svg?branch=master)
+
 PHP Client Library for the Hashicorp Vault Service. 
 This Client follows the Request and Response Data equal to the Hashicorp Vault Client Documentation.
 - Authentication https://www.vaultproject.io/api-docs/auth
 - Secret Engines https://www.vaultproject.io/api-docs/secret
 
 Feel free to open Pull Requests to add improvements or missing functionality.
+
+## Installation
+
+### Composer
+`composer require mittwald/vault-php`
 
 ## Implemented Functionality:
 - Auth
