@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<psalm
+    totallyTyped="false"
+    allowPhpStormGenerics="true"
+    errorLevel="2"
+    resolveFromConfigFile="true"
+    allowStringToStandInForClass="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="src" />
+    </projectFiles>
+
+    <issueHandlers>
+        <!-- can't do this while still supporting PHP 5 -->
+        <MissingParamType errorLevel="suppress" />
+        <MissingClosureReturnType errorLevel="suppress" />
+
+        <!-- more checks than necessary don't hurt -->
+        <RedundantConditionGivenDocblockType errorLevel="suppress" />
+        <DocblockTypeContradiction errorLevel="suppress" />
+    </issueHandlers>
+</psalm>
