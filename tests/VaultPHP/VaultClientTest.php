@@ -3,26 +3,13 @@
 namespace Test\VaultPHP;
 
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
 use Http\Client\HttpClient;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Test\VaultPHP\Mocks\EndpointResponseMock;
-use Test\VaultPHP\Mocks\InvalidEndpointResponseMock;
-use VaultPHP\Authentication\AuthenticationMetaData;
 use VaultPHP\Authentication\AuthenticationProviderInterface;
 use VaultPHP\Authentication\Provider\Token;
-use VaultPHP\Exceptions\InvalidDataException;
-use VaultPHP\Exceptions\InvalidRouteException;
-use VaultPHP\Exceptions\KeyNameNotFoundException;
-use VaultPHP\Exceptions\VaultAuthenticationException;
-use VaultPHP\Exceptions\VaultException;
-use VaultPHP\Exceptions\VaultHttpException;
-use VaultPHP\Exceptions\VaultResponseException;
-use VaultPHP\Response\MetaData;
 use VaultPHP\Response\EndpointResponse;
-use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptDataBulkRequest;
 use VaultPHP\VaultClient;
 
 /**
@@ -72,7 +59,6 @@ final class VaultClientTest extends TestCase
     }
 
     public function testSendRequest() {
-        $request = new Request('GET', 'foo');
         $response = new Response();
 
         $httpClient = $this->createMock(HttpClient::class);
