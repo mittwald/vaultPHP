@@ -74,8 +74,8 @@ public function __construct(
 `$apiHost` Hashicorp Vault REST Endpoint URL
 
 ## Bulk Requests
-Bulk Requests **will not** throw `InvalidDataExceptions`. Using Bulk Requests requires to iterate through the Response
-and calling `hasErrors` within the `BasicMetaResponse`.
+Using Bulk Requests also requires to iterate through the Response
+and calling `hasErrors` within the `MetaData` of each Bulk Item to ensure it was processed successfully.
 
 ## Exceptions
 Calling library methods will throw exceptions, indicating where ever invalid data was provided
