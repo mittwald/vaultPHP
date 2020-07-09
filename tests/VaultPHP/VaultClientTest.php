@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Test\VaultPHP\Mocks\EndpointResponseMock;
+use Test\VaultPHP\Mocks\InvalidEndpointResponseMock;
 use VaultPHP\Authentication\AuthenticationMetaData;
 use VaultPHP\Authentication\AuthenticationProviderInterface;
 use VaultPHP\Authentication\Provider\Token;
@@ -18,16 +19,16 @@ use VaultPHP\Exceptions\VaultAuthenticationException;
 use VaultPHP\Exceptions\VaultException;
 use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Exceptions\VaultResponseException;
-use VaultPHP\Response\BasicMetaResponse;
+use VaultPHP\Response\MetaData;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptDataBulkRequest;
 use VaultPHP\VaultClient;
 
 /**
- * Class VaultPHPTest
+ * Class VaultClientTest
  * @package Test\VaultPHP
  */
-final class VaultPHPTest extends TestCase
+final class VaultClientTest extends TestCase
 {
     public function testAuthProviderGetsClientInjected()
     {
@@ -166,7 +167,7 @@ final class VaultPHPTest extends TestCase
             ]));
 
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
-        $client->sendApiRequest('GET', '/foo', [], BasicMetaResponse::class);
+        $client->sendApiRequest('GET', '/foo', [], MetaData::class);
     }
 
     public function testWillThrowWhenReturnClassDeclarationIsInvalidForBulk() {
@@ -187,7 +188,7 @@ final class VaultPHPTest extends TestCase
             ]));
 
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
-        $client->sendApiRequest('GET', '/foo', BasicMetaResponse::class, new EncryptDataBulkRequest('foo'));
+        $client->sendApiRequest('GET', '/foo', MetaData::class, new EncryptDataBulkRequest('foo'));
     }
 
     public function testWillThrowWhenResultOfReturnClassDeclarationIsInvalid() {
@@ -208,7 +209,7 @@ final class VaultPHPTest extends TestCase
             ]));
 
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
-        $client->sendApiRequest('GET', '/foo', EndpointResponseMock::class, []);
+        $client->sendApiRequest('GET', '/foo', InvalidEndpointResponseMock::class, []);
     }
 
     private function simulateApiResponse($responseStatus, $responseBody = '', $responseHeader = []) {

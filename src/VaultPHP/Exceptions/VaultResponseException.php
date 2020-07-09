@@ -30,7 +30,7 @@ class VaultResponseException extends VaultException
         $this->request = $request;
 
         $parsedResponse = EndpointResponse::fromResponse($response);
-        $returnedErrors = $parsedResponse->getBasicMetaResponse()->getErrors();
+        $returnedErrors = $parsedResponse->getMetaData()->getErrors();
         $errors = implode(', ',  is_array($returnedErrors) ? $returnedErrors : []);
 
         parent::__construct($errors, $response->getStatusCode(), $prevException);

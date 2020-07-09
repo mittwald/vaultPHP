@@ -7,6 +7,7 @@ use VaultPHP\Exceptions\InvalidRouteException;
 use VaultPHP\Exceptions\VaultAuthenticationException;
 use VaultPHP\Exceptions\VaultException;
 use VaultPHP\Exceptions\VaultHttpException;
+use VaultPHP\Response\BulkEndpointResponse;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\SecretEngines\AbstractSecretEngine;
 use VaultPHP\SecretEngines\Engines\Transit\Request\CreateKeyRequest;
@@ -66,14 +67,14 @@ final class Transit extends AbstractSecretEngine
 
     /**
      * @param EncryptDataBulkRequest $encryptDataBulkRequest
-     * @return EncryptDataResponse[]
+     * @return BulkEndpointResponse
      * @throws InvalidDataException
      * @throws InvalidRouteException
      * @throws VaultException
      */
     public function encryptDataBulk(EncryptDataBulkRequest $encryptDataBulkRequest)
     {
-        /** @var EncryptDataResponse[] */
+        /** @var BulkEndpointResponse */
         return $this->vaultClient->sendApiRequest(
             'POST',
             sprintf('/v1/transit/encrypt/%s', urlencode($encryptDataBulkRequest->getName())),
@@ -102,7 +103,7 @@ final class Transit extends AbstractSecretEngine
 
     /**
      * @param DecryptDataBulkRequest $decryptDataBulkRequest
-     * @return EndpointResponse|EndpointResponse[]
+     * @return BulkEndpointResponse
      * @throws InvalidDataException
      * @throws InvalidRouteException
      * @throws VaultException
@@ -111,7 +112,7 @@ final class Transit extends AbstractSecretEngine
      */
     public function decryptDataBulk(DecryptDataBulkRequest $decryptDataBulkRequest)
     {
-        /** @var DecryptDataResponse[] */
+        /** @var BulkEndpointResponse */
         return $this->vaultClient->sendApiRequest(
             'POST',
             sprintf('/v1/transit/decrypt/%s', urlencode($decryptDataBulkRequest->getName())),

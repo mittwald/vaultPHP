@@ -3,10 +3,10 @@
 namespace VaultPHP\Response;
 
 /**
- * Class BasicMetaResponse
+ * Class MetaData
  * @package VaultPHP\Response
  */
-class BasicMetaResponse implements BasicMetaResponseInterface
+class MetaData implements MetaDataInterface
 {
     /** @var string|null */
     private $request_id;
@@ -33,7 +33,7 @@ class BasicMetaResponse implements BasicMetaResponseInterface
     private $errors;
 
     /**
-     * BasicMetaResponse constructor.
+     * MetaData constructor.
      * @param array|object $data
      */
     public function __construct($data = [])

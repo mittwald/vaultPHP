@@ -10,16 +10,17 @@ use Psr\Http\Message\ResponseInterface;
  */
 class EndpointResponse implements EndpointResponseInterface
 {
-    /** @var BasicMetaResponse */
-    private $basicMetaResponse;
+    /** @var MetaData */
+    protected $metaData;
 
     /**
      * EndpointResponse constructor.
      * @param array|object $data
+     * @param array $meta
      */
-    public function __construct($data = [])
+    public function __construct($data = [], $meta = [])
     {
-        $this->basicMetaResponse = new BasicMetaResponse();
+        $this->metaData = new MetaData($meta);
         $this->populateData($data);
     }
 
@@ -27,7 +28,7 @@ class EndpointResponse implements EndpointResponseInterface
      * @param $response
      * @return array
      */
-    private static function getResponseContent(ResponseInterface $response) {
+    protected static function getResponseContent(ResponseInterface $response) {
         $responseBody = $response->getBody();
         $responseBody->rewind();
         $responseBodyContents = $responseBody->getContents();
@@ -41,7 +42,7 @@ class EndpointResponse implements EndpointResponseInterface
      * @param ResponseInterface $response
      * @return static
      */
-    static function fromResponse(ResponseInterface $response)
+    public static function fromResponse(ResponseInterface $response)
     {
         $metaData = static::getResponseContent($response);
 
@@ -49,46 +50,32 @@ class EndpointResponse implements EndpointResponseInterface
         $domainData = isset($metaData['data']) ? $metaData['data'] : [];
         unset($metaData['data']);
 
-        $responseDTO = new static($domainData);
-        $responseDTO->basicMetaResponse = new BasicMetaResponse($metaData);
-
-        return $responseDTO;
+        return new static($domainData, $metaData);
     }
 
     /**
      * @param ResponseInterface $response
-     * @return static[]
+     * @return BulkEndpointResponse
      */
     static function fromBulkResponse(ResponseInterface $response)
     {
-        $resultArray = [];
         $metaData = static::getResponseContent($response);
 
-        /** @var object $domainData */
+        /** @var object|array $domainData */
         $domainData = isset($metaData['data']) ? $metaData['data'] : [];
         unset($metaData['data']);
 
-        if ($domainData && is_array($domainData->batch_results)) {
+        $responseDTO = new BulkEndpointResponse($domainData, $metaData);
+        $responseDTO->batch_results = array_map(function($batchResult) {
             /** @var object $batchResult */
-            foreach($domainData->batch_results as $batchResult) {
-                /** @var array $batchMetaData */
-                $batchMetaData = $metaData;
 
-                if (isset($batchResult->error)) {
-                    /** @var array $currentErrors */
-                    $currentErrors = isset($metaData['errors']) ? $metaData['errors'] : [];
-                    array_push($currentErrors, $batchResult->error);
+            $errors = isset($batchResult->error) && $batchResult->error ? explode(', ', (string) $batchResult->error) : [];
+            return new static($batchResult, [
+                'errors' => $errors,
+            ]);
+        }, $responseDTO->batch_results);
 
-                    $batchMetaData['errors'] = $currentErrors;
-                }
-
-                $responseDTO = new static($batchResult);
-                $responseDTO->basicMetaResponse = new BasicMetaResponse($batchMetaData);
-                $resultArray[] = $responseDTO;
-            }
-        }
-
-        return $resultArray;
+        return $responseDTO;
     }
 
     /**
@@ -107,10 +94,18 @@ class EndpointResponse implements EndpointResponseInterface
     }
 
     /**
-     * @return BasicMetaResponse
+     * @return MetaData
      */
-    public function getBasicMetaResponse()
+    public function getMetaData()
     {
-        return $this->basicMetaResponse;
+        return $this->metaData;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasErrors()
+    {
+        return (bool) $this->getMetaData()->hasErrors();
     }
 }

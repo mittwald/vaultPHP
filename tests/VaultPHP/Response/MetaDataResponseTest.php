@@ -4,17 +4,17 @@ namespace Test\VaultPHP\Response;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use VaultPHP\Response\BasicMetaResponse;
+use VaultPHP\Response\MetaData;
 
 /**
  * Class BasicMetaResponseTest
  * @package Test\VaultPHP\Response
  */
-final class BasicMetaResponseTest extends TestCase
+final class MetaDataResponseTest extends TestCase
 {
     private function createTestData()
     {
-        $reflectionClass = new ReflectionClass(BasicMetaResponse::class);
+        $reflectionClass = new ReflectionClass(MetaData::class);
 
         $classPropertyNames = array_map(function ($property) {
             return $property->getName();
@@ -42,26 +42,26 @@ final class BasicMetaResponseTest extends TestCase
     public function testCanPopulateArrayDataToSelf()
     {
         $testData = $this->createTestData();
-        $basicMetaData = new BasicMetaResponse((array)$testData);
+        $basicMetaData = new MetaData((array)$testData);
         $this->checkDtoData($testData, $basicMetaData);
     }
 
     public function testCanPopulateObjectDataToSelf()
     {
         $testData = $this->createTestData();
-        $basicMetaData = new BasicMetaResponse((object)$testData);
+        $basicMetaData = new MetaData((object)$testData);
         $this->checkDtoData($testData, $basicMetaData);
     }
 
     public function testCheckForErrors()
     {
         $error = ["foo"];
-        $basicMetaData = new BasicMetaResponse(['errors' => $error]);
+        $basicMetaData = new MetaData(['errors' => $error]);
 
         $this->assertTrue($basicMetaData->hasErrors());
         $this->assertEquals($error, $basicMetaData->getErrors());
 
-        $basicMetaData = new BasicMetaResponse(['errors' => []]);
+        $basicMetaData = new MetaData(['errors' => []]);
 
         $this->assertFalse($basicMetaData->hasErrors());
         $this->assertEquals([], $basicMetaData->getErrors());

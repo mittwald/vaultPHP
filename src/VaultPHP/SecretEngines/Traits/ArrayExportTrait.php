@@ -27,6 +27,7 @@ trait ArrayExportTrait
             if (is_array($data)) {
                 $output[$key] = $this->array_map_r($callback, $data);
             } else {
+                /** @psalm-suppress MixedAssignment */
                 $output[$key] = $callback($data);
             }
         }
@@ -40,7 +41,7 @@ trait ArrayExportTrait
     public function toArray()
     {
         $data = get_object_vars($this);
-        return $this->array_map_r(
+        $result = $this->array_map_r(
         /** @psalm-suppress MissingClosureParamType */
         function ($v) {
                 if ($v instanceof ArrayExportInterface) {
@@ -50,5 +51,7 @@ trait ArrayExportTrait
             },
             $data
         );
+
+        return array_filter($result);
     }
 }
