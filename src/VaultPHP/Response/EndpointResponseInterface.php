@@ -29,7 +29,7 @@ interface EndpointResponseInterface
     public function getMetaData();
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function hasErrors();
 }
