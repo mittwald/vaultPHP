@@ -97,7 +97,7 @@ class VaultClient
      * @param string $returnClass
      * @param array|ResourceRequestInterface $data
      * @param bool $authRequired
-     * @return mixed|mixed[]
+     * @return mixed
      * @throws InvalidDataException
      * @throws InvalidRouteException
      * @throws VaultAuthenticationException
@@ -132,7 +132,7 @@ class VaultClient
      * @param ResponseInterface $response
      * @param string $returnClass
      * @param boolean $isBulkRequest
-     * @return mixed|mixed[]
+     * @return mixed
      * @throws InvalidDataException
      * @throws InvalidRouteException
      * @throws VaultAuthenticationException
@@ -153,7 +153,7 @@ class VaultClient
          */
         if (!$isBulkRequest) {
             /** @psalm-suppress ArgumentTypeCoercion */
-            if (!$returnClass || !method_exists($returnClass, 'fromResponse')) {
+            if (!method_exists($returnClass, 'fromResponse')) {
                 throw new VaultException('Return Class declaration lacks static::fromResponse');
             }
 
@@ -161,7 +161,7 @@ class VaultClient
             $responseDataDTO = $returnClass::fromResponse($response);
         } else {
             /** @psalm-suppress ArgumentTypeCoercion */
-            if (!$returnClass || !method_exists($returnClass, 'fromBulkResponse')) {
+            if (!method_exists($returnClass, 'fromBulkResponse')) {
                 throw new VaultException('Return Class declaration lacks static::fromBulkResponse');
             }
 
@@ -169,7 +169,7 @@ class VaultClient
             $responseDataDTO = $returnClass::fromBulkResponse($response);
         }
 
-        if (!is_array($responseDataDTO) && !$responseDataDTO instanceof EndpointResponseInterface) {
+        if (!$responseDataDTO instanceof EndpointResponseInterface) {
             throw new VaultException('Result from "fromResponse/fromBulkResponse" isn\'t an instance of EndpointResponse or Array');
         }
 

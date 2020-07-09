@@ -3,14 +3,18 @@
 namespace Test\VaultPHP\Mocks;
 
 use Psr\Http\Message\ResponseInterface;
-use VaultPHP\Response\EndpointResponseInterface;
+use VaultPHP\Response\EndpointResponse;
 
 /**
- * Class EndpointResponseMock
+ * Class InvalidEndpointResponseMock
  * @package Test\VaultPHP
  */
-class EndpointResponseMock implements EndpointResponseInterface {
+class InvalidEndpointResponseMock extends EndpointResponse {
 
+    /**
+     * @param ResponseInterface $response
+     * @return mixed
+     */
     public static function fromResponse(ResponseInterface $response)
     {
         return 'IamInvalid';
@@ -19,5 +23,10 @@ class EndpointResponseMock implements EndpointResponseInterface {
     public function getBasicMetaResponse()
     {
         return false;
+    }
+
+    public function hasErrors()
+    {
+        return true;
     }
 }

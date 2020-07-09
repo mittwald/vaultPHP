@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Test\VaultPHP\Mocks\EndpointResponseMock;
+use Test\VaultPHP\Mocks\InvalidEndpointResponseMock;
 use VaultPHP\Authentication\AuthenticationMetaData;
 use VaultPHP\Authentication\AuthenticationProviderInterface;
 use VaultPHP\Authentication\Provider\Token;
@@ -24,10 +25,10 @@ use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptDataBulkRe
 use VaultPHP\VaultClient;
 
 /**
- * Class VaultPHPTest
+ * Class VaultClientTest
  * @package Test\VaultPHP
  */
-final class VaultPHPTest extends TestCase
+final class VaultClientTest extends TestCase
 {
     public function testAuthProviderGetsClientInjected()
     {
@@ -208,7 +209,7 @@ final class VaultPHPTest extends TestCase
             ]));
 
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
-        $client->sendApiRequest('GET', '/foo', EndpointResponseMock::class, []);
+        $client->sendApiRequest('GET', '/foo', InvalidEndpointResponseMock::class, []);
     }
 
     private function simulateApiResponse($responseStatus, $responseBody = '', $responseHeader = []) {

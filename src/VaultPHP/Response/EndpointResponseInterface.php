@@ -12,12 +12,24 @@ interface EndpointResponseInterface
 {
     /**
      * @param ResponseInterface $response
-     * @return mixed
+     * @return static
      */
     static function fromResponse(ResponseInterface $response);
+
+    /**
+     * @param ResponseInterface $response
+     * @return BulkEndpointResponse
+     */
+    static function fromBulkResponse(ResponseInterface $response);
+
 
     /**
      * @return BasicMetaResponse
      */
     public function getBasicMetaResponse();
+
+    /**
+     * @return mixed
+     */
+    public function hasErrors();
 }

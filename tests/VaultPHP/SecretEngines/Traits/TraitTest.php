@@ -12,10 +12,10 @@ use VaultPHP\SecretEngines\Engines\Transit\Request\DecryptData\DecryptData;
 use VaultPHP\SecretEngines\Engines\Transit\Request\DecryptData\DecryptDataBulkRequest;
 
 /**
- * Class ArrayExportTraitTest
+ * Class TraitTest
  * @package Test\VaultPHP\SecretEngines\Traits
  */
-class ArrayExportTraitTest extends TestCase
+class TraitTest extends TestCase
 {
     public function testArrayExtractionFromRequest()
     {
