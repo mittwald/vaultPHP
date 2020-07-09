@@ -58,9 +58,8 @@ try {
 
     /** @var EncryptDataResponse $bulkResult */
     foreach($encryptBulkResponse as $bulkResult) {
-        // BULK REQUEST WON'T THROW INVALID DATA EXCEPTIONS
-        // SO YOU ARE RESPONSABLE TO CHECK IF EVERY BULK WAS
-        // SUCCESSFULLY PROCESSED
+        // TO ENSURE EVERY BULK ENCRYPT REQUEST WAS SUCCESSFULLY PROCESSED
+        // YOU HAVE TO CHECK FOR ERRORS OF EVERY BULK ITEM
         if (!$bulkResult->getMetaData()->hasErrors()) {
             var_dump($bulkResult->getCiphertext());
         }
