@@ -110,3 +110,9 @@ ___
 `InvalidDataException`
 
 Exception indicates a failed server payload validation. 
+
+___
+
+`KeyNameNotFoundException`
+
+Will be thrown when trying to request an API Endpoint where the Key Name - that is indicated within the url - will not exist.
