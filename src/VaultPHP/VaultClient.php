@@ -184,7 +184,7 @@ class VaultClient
             } elseif ($status === 404) {
                 // if 404 and no error this indicates no data for e.g. List
                 // makes no sense but hey - the vault rest is a magical unicorn
-                if (!is_array($responseDataDTO) && !$responseDataDTO->getBasicMetaResponse()->hasErrors()) {
+                if (!is_array($responseDataDTO) && !$responseDataDTO->getMetaData()->hasErrors()) {
                     return $responseDataDTO;
                 }
 

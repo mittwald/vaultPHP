@@ -56,7 +56,7 @@ class UserPassword extends AbstractAuthenticationProvider
             false
         );
 
-        if ($auth = $response->getBasicMetaResponse()->getAuth()) {
+        if ($auth = $response->getMetaData()->getAuth()) {
             return new AuthenticationMetaData($auth);
         }
 

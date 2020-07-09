@@ -10,6 +10,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Request\CreateKeyRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptData;
 use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptDataBulkRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Request\UpdateKeyConfigRequest;
+use VaultPHP\SecretEngines\Engines\Transit\Response\EncryptDataResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Transit;
 use VaultPHP\SecretEngines\Engines\Transit\EncryptionType;
 use VaultPHP\VaultClient;
@@ -52,11 +53,15 @@ try {
     ]);
     $encryptBulkResponse = $transitApi->encryptDataBulk($encryptRequest);
 
+    // indicates that one or more bulk results contains errors
+    var_dump($encryptBulkResponse->hasErrors());
+
+    /** @var EncryptDataResponse $bulkResult */
     foreach($encryptBulkResponse as $bulkResult) {
         // BULK REQUEST WON'T THROW INVALID DATA EXCEPTIONS
         // SO YOU ARE RESPONSABLE TO CHECK IF EVERY BULK WAS
         // SUCCESSFULLY PROCESSED
-        if (!$bulkResult->getBasicMetaResponse()->hasErrors()) {
+        if (!$bulkResult->getMetaData()->hasErrors()) {
             var_dump($bulkResult->getCiphertext());
         }
     }

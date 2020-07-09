@@ -25,12 +25,12 @@ class BulkEndpointResponse extends EndpointResponse implements Iterator, ArrayAc
      * @return bool
      */
     public function hasErrors() {
-        $errorOccurred = $this->getBasicMetaResponse()->hasErrors();
+        $errorOccurred = $this->getMetaData()->hasErrors();
 
         if (!$errorOccurred) {
             /** @var EndpointResponse $batchResult */
             foreach ($this as $batchResult) {
-                $errorOccurred = $batchResult->getBasicMetaResponse()->hasErrors();
+                $errorOccurred = $batchResult->getMetaData()->hasErrors();
                 if ($errorOccurred) {
                     return true;
                 }

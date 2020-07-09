@@ -5,7 +5,7 @@ namespace Test\VaultPHP\Response;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use VaultPHP\Exceptions\VaultException;
-use VaultPHP\Response\BasicMetaResponse;
+use VaultPHP\Response\MetaData;
 use VaultPHP\Response\BulkEndpointResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\DecryptDataResponse;
 
@@ -153,12 +153,12 @@ final class BulkEndpointResponseTest extends TestCase
             ],
         ]));
         $bulkResponses = DecryptDataResponse::fromBulkResponse($response);
-        $this->assertEquals([], $bulkResponses[0]->getBasicMetaResponse()->getErrors());
-        $this->assertEquals(['baz', 'buz'], $bulkResponses[1]->getBasicMetaResponse()->getErrors());
-        $this->assertEquals([], $bulkResponses[2]->getBasicMetaResponse()->getErrors());
-        $this->assertEquals(['bam'], $bulkResponses[3]->getBasicMetaResponse()->getErrors());
+        $this->assertEquals([], $bulkResponses[0]->getMetaData()->getErrors());
+        $this->assertEquals(['baz', 'buz'], $bulkResponses[1]->getMetaData()->getErrors());
+        $this->assertEquals([], $bulkResponses[2]->getMetaData()->getErrors());
+        $this->assertEquals(['bam'], $bulkResponses[3]->getMetaData()->getErrors());
 
-        $this->assertEquals(['foo', 'bar'], $bulkResponses->getBasicMetaResponse()->getErrors());
+        $this->assertEquals(['foo', 'bar'], $bulkResponses->getMetaData()->getErrors());
     }
 
     public function testCanGetPopulateMetaDataFromBulkResponse()
@@ -183,19 +183,19 @@ final class BulkEndpointResponseTest extends TestCase
         $arrayEndpointResponse = DecryptDataResponse::fromBulkResponse($response);
         $this->assertSame(3, count($arrayEndpointResponse));
 
-        $basicMeta = $arrayEndpointResponse->getBasicMetaResponse();
+        $basicMeta = $arrayEndpointResponse->getMetaData();
         $this->assertEquals(['metaDataError', 'metaDataError2'], $basicMeta->getErrors());
         $this->assertTrue($arrayEndpointResponse->hasErrors());
 
         /** @var DecryptDataResponse $batchResponse */
         foreach($arrayEndpointResponse as $batchResponse) {
             $this->assertInstanceOf(DecryptDataResponse::class, $batchResponse);
-            $this->assertInstanceOf(BasicMetaResponse::class, $batchResponse->getBasicMetaResponse());
+            $this->assertInstanceOf(MetaData::class, $batchResponse->getMetaData());
         }
 
-        $this->assertEquals(['batchError'], $arrayEndpointResponse[0]->getBasicMetaResponse()->getErrors());
-        $this->assertEquals([], $arrayEndpointResponse[1]->getBasicMetaResponse()->getErrors());
-        $this->assertEquals(['batchError2'], $arrayEndpointResponse[2]->getBasicMetaResponse()->getErrors());
+        $this->assertEquals(['batchError'], $arrayEndpointResponse[0]->getMetaData()->getErrors());
+        $this->assertEquals([], $arrayEndpointResponse[1]->getMetaData()->getErrors());
+        $this->assertEquals(['batchError2'], $arrayEndpointResponse[2]->getMetaData()->getErrors());
     }
 
     public function testBulkPayloadWillBePopulatedToResponseClass()

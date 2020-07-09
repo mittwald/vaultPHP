@@ -20,7 +20,7 @@ class InvalidEndpointResponseMock extends EndpointResponse {
         return 'IamInvalid';
     }
 
-    public function getBasicMetaResponse()
+    public function getMetaData()
     {
         return false;
     }

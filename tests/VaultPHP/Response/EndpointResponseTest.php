@@ -4,7 +4,7 @@ namespace Test\VaultPHP\Response;
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use VaultPHP\Response\BasicMetaResponse;
+use VaultPHP\Response\MetaData;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\DecryptDataResponse;
 
@@ -36,10 +36,10 @@ final class EndpointResponseTest extends TestCase
         ];
         $response = new Response(200, [], json_encode($testMeta));
         $endpointResponse = EndpointResponse::fromResponse($response);
-        $basicMeta = $endpointResponse->getBasicMetaResponse();
+        $basicMeta = $endpointResponse->getMetaData();
 
         $this->assertInstanceOf(EndpointResponse::class, $endpointResponse);
-        $this->assertInstanceOf(BasicMetaResponse::class, $basicMeta);
+        $this->assertInstanceOf(MetaData::class, $basicMeta);
 
         $this->assertEquals($testMeta['request_id'], $basicMeta->getRequestId());
         $this->assertEquals($testMeta['lease_id'], $basicMeta->getLeaseId());
@@ -94,6 +94,6 @@ final class EndpointResponseTest extends TestCase
             'data' => [],
         ]));
         $endpointResponse = DecryptDataResponse::fromResponse($response);
-        $this->assertEquals(['foo', 'bar'], $endpointResponse->getBasicMetaResponse()->getErrors());
+        $this->assertEquals(['foo', 'bar'], $endpointResponse->getMetaData()->getErrors());
     }
 }

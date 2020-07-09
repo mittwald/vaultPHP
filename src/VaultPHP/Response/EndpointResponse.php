@@ -10,8 +10,8 @@ use Psr\Http\Message\ResponseInterface;
  */
 class EndpointResponse implements EndpointResponseInterface
 {
-    /** @var BasicMetaResponse */
-    protected $basicMetaResponse;
+    /** @var MetaData */
+    protected $metaData;
 
     /**
      * EndpointResponse constructor.
@@ -20,7 +20,7 @@ class EndpointResponse implements EndpointResponseInterface
      */
     public function __construct($data = [], $meta = [])
     {
-        $this->basicMetaResponse = new BasicMetaResponse($meta);
+        $this->metaData = new MetaData($meta);
         $this->populateData($data);
     }
 
@@ -94,11 +94,11 @@ class EndpointResponse implements EndpointResponseInterface
     }
 
     /**
-     * @return BasicMetaResponse
+     * @return MetaData
      */
-    public function getBasicMetaResponse()
+    public function getMetaData()
     {
-        return $this->basicMetaResponse;
+        return $this->metaData;
     }
 
     /**
@@ -106,6 +106,6 @@ class EndpointResponse implements EndpointResponseInterface
      */
     public function hasErrors()
     {
-        return (bool) $this->getBasicMetaResponse()->hasErrors();
+        return (bool) $this->getMetaData()->hasErrors();
     }
 }

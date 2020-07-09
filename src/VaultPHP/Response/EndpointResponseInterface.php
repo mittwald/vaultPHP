@@ -24,9 +24,9 @@ interface EndpointResponseInterface
 
 
     /**
-     * @return BasicMetaResponse
+     * @return MetaData
      */
-    public function getBasicMetaResponse();
+    public function getMetaData();
 
     /**
      * @return mixed

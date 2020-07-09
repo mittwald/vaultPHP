@@ -3,10 +3,10 @@
 namespace VaultPHP\Response;
 
 /**
- * Interface BasicMetaResponseInterface
+ * Interface MetaDataInterface
  * @package VaultPHP\Response
  */
-interface BasicMetaResponseInterface
+interface MetaDataInterface
 {
     /**
      * GenericEndpointResponse constructor.
