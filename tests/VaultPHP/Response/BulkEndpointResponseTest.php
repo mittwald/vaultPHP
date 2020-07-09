@@ -28,7 +28,7 @@ final class BulkEndpointResponseTest extends TestCase
         ]));
         $bulkResponses = DecryptDataResponse::fromBulkResponse($response);
         $this->assertInstanceOf(BulkEndpointResponse::class, $bulkResponses);
-        $this->assertIsArray($bulkResponses->getBatchResults());
+        $this->assertTrue(is_array($bulkResponses->getBatchResults()));
 
         // test foreach
         foreach ($bulkResponses as $batchResponse) {
