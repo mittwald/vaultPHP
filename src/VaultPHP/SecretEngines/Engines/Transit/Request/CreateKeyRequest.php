@@ -30,11 +30,12 @@ final class CreateKeyRequest implements ResourceRequestInterface, NamedRequestIn
 
     /**
      * @param string $type
-     * @return void
+     * @return $this
      */
     public function setType($type)
     {
         $this->type = $type;
+        return $this;
     }
 
     /**

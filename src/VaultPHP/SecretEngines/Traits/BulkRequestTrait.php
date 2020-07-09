@@ -13,11 +13,12 @@ trait BulkRequestTrait
 
     /**
      * @param mixed $request
-     * @return void
+     * @return $this
      */
     public function addBulkRequest($request)
     {
         $this->batch_input[] = $request;
+        return $this;
     }
 
     /**

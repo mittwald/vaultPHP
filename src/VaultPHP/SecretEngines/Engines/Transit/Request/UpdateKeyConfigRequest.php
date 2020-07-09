@@ -42,47 +42,52 @@ final class UpdateKeyConfigRequest implements ResourceRequestInterface, NamedReq
 
     /**
      * @param $allow boolean
-     * @return void
+     * @return $this
      */
     public function setDeletionAllowed($allow)
     {
         $this->deletion_allowed = (boolean)$allow;
+        return $this;
     }
 
     /**
      * @param int $min_decryption_version
-     * @return void
+     * @return $this
      */
     public function setMinDecryptionVersion($min_decryption_version)
     {
         $this->min_decryption_version = (int)$min_decryption_version;
+        return $this;
     }
 
     /**
      * @param int $min_encryption_version
-     * @return void
+     * @return $this
      */
     public function setMinEncryptionVersion($min_encryption_version)
     {
         $this->min_encryption_version = (int)$min_encryption_version;
+        return $this;
     }
 
     /**
      * @param bool $exportable
-     * @return void
+     * @return $this
      */
     public function setExportable($exportable)
     {
         $this->exportable = (bool)$exportable;
+        return $this;
     }
 
     /**
      * @param bool $allow_plaintext_backup
-     * @return void
+     * @return $this
      */
     public function setAllowPlaintextBackup($allow_plaintext_backup)
     {
         $this->allow_plaintext_backup = (bool)$allow_plaintext_backup;
+        return $this;
     }
 
     /**

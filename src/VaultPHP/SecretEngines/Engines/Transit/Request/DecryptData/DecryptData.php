@@ -45,11 +45,12 @@ class DecryptData implements ArrayExportInterface
 
     /**
      * @param string $ciphertext
-     * @return void
+     * @return $this
      */
     public function setCiphertext($ciphertext)
     {
         $this->ciphertext = $ciphertext;
+        return $this;
     }
 
     /**
@@ -62,11 +63,12 @@ class DecryptData implements ArrayExportInterface
 
     /**
      * @param string|null $nonce
-     * @return void
+     * @return $this
      */
     public function setNonce($nonce)
     {
         $this->nonce = $nonce;
+        return $this;
     }
 
     /**
@@ -79,10 +81,11 @@ class DecryptData implements ArrayExportInterface
 
     /**
      * @param string|null $context
-     * @return void
+     * @return $this
      */
     public function setContext($context)
     {
         $this->context = $context;
+        return $this;
     }
 }

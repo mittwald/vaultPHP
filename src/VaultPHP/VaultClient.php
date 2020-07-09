@@ -10,10 +10,12 @@ use VaultPHP\Authentication\AuthenticationMetaData;
 use VaultPHP\Authentication\AuthenticationProviderInterface;
 use VaultPHP\Exceptions\InvalidDataException;
 use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\KeyNameNotFoundException;
 use VaultPHP\Exceptions\VaultAuthenticationException;
 use VaultPHP\Exceptions\VaultException;
 use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Exceptions\VaultResponseException;
+use VaultPHP\Response\ApiErrors;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\Response\EndpointResponseInterface;
 use VaultPHP\SecretEngines\Interfaces\ArrayExportInterface;
@@ -173,18 +175,24 @@ class VaultClient
             throw new VaultException('Result from "fromResponse/fromBulkResponse" isn\'t an instance of EndpointResponse or Array');
         }
 
+        $responseMetaData = $responseDataDTO->getMetaData();
+        $responseHasErrors = $responseMetaData->hasErrors();
+
         if ($status >= 200 && $status < 300) {
             return $responseDataDTO;
 
         } elseif ($status >= 400 && $status < 500) {
             if ($status === 400) {
+                if ($responseMetaData->containsError(ApiErrors::ENCRYPTION_KEY_NOT_FOUND)) {
+                    throw new KeyNameNotFoundException($response, $request);
+                }
                 throw new InvalidDataException($response, $request);
             } elseif ($status === 403) {
                 throw new VaultAuthenticationException('Authentication with provided Token failed');
             } elseif ($status === 404) {
                 // if 404 and no error this indicates no data for e.g. List
                 // makes no sense but hey - the vault rest is a magical unicorn
-                if (!is_array($responseDataDTO) && !$responseDataDTO->getMetaData()->hasErrors()) {
+                if (!$isBulkRequest && !$responseHasErrors) {
                     return $responseDataDTO;
                 }
 

@@ -58,4 +58,10 @@ interface MetaDataInterface
      * @return boolean
      */
     public function hasErrors();
+
+    /**
+     * @param array $error
+     * @return bool
+     */
+    public function containsError($error);
 }
