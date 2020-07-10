@@ -23,13 +23,13 @@ class MetaData implements MetaDataInterface
     /** @var string|null */
     private $wrap_info;
 
-    /** @var array */
+    /** @var string[] */
     private $warnings = [];
 
     /** @var object|null */
     private $auth;
 
-    /** @var array */
+    /** @var string[] */
     private $errors = [];
 
     /**
@@ -97,7 +97,7 @@ class MetaData implements MetaDataInterface
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getWarnings()
     {
@@ -113,7 +113,7 @@ class MetaData implements MetaDataInterface
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getErrors()
     {
