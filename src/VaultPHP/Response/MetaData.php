@@ -23,14 +23,14 @@ class MetaData implements MetaDataInterface
     /** @var string|null */
     private $wrap_info;
 
-    /** @var array|null */
-    private $warnings;
+    /** @var string[] */
+    private $warnings = [];
 
     /** @var object|null */
     private $auth;
 
-    /** @var array|null */
-    private $errors;
+    /** @var string[] */
+    private $errors = [];
 
     /**
      * MetaData constructor.
@@ -97,7 +97,7 @@ class MetaData implements MetaDataInterface
     }
 
     /**
-     * @return array|null
+     * @return string[]
      */
     public function getWarnings()
     {
@@ -113,11 +113,28 @@ class MetaData implements MetaDataInterface
     }
 
     /**
-     * @return array|null
+     * @return string[]
      */
     public function getErrors()
     {
         return $this->errors;
+    }
+
+    /**
+     * @param array $error
+     * @return boolean
+     */
+    public function containsError($error) {
+        /** @var string $apiError */
+        foreach ($this->getErrors() as $apiError) {
+            /** @var string $errorMessage */
+            foreach ($error as $errorMessage) {
+                if (preg_match("#${errorMessage}#i", $apiError)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

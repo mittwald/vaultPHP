@@ -45,11 +45,12 @@ class EncryptData implements ArrayExportInterface
 
     /**
      * @param string $plaintext
-     * @return void
+     * @return $this
      */
     public function setPlaintext($plaintext)
     {
         $this->plaintext = base64_encode($plaintext);
+        return $this;
     }
 
     /**
@@ -62,11 +63,12 @@ class EncryptData implements ArrayExportInterface
 
     /**
      * @param string|null $nonce
-     * @return void
+     * @return $this
      */
     public function setNonce($nonce)
     {
         $this->nonce = $nonce;
+        return $this;
     }
 
     /**
@@ -79,10 +81,11 @@ class EncryptData implements ArrayExportInterface
 
     /**
      * @param string|null $context
-     * @return void
+     * @return $this
      */
     public function setContext($context)
     {
         $this->context = $context;
+        return $this;
     }
 }

@@ -15,7 +15,7 @@ interface NamedRequestInterface
 
     /**
      * @param string $name
-     * @return void
+     * @return $this
      */
     public function setName($name);
 }

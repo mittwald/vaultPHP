@@ -4,6 +4,7 @@ namespace Test\VaultPHP\Response;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use VaultPHP\Response\ApiErrors;
 use VaultPHP\Response\MetaData;
 
 /**
@@ -55,15 +56,17 @@ final class MetaDataResponseTest extends TestCase
 
     public function testCheckForErrors()
     {
-        $error = ["foo"];
+        $error = ["nO eXiStiNg kEy nAMed FOOOBAR cOULd bE foUnD"];
         $basicMetaData = new MetaData(['errors' => $error]);
 
         $this->assertTrue($basicMetaData->hasErrors());
         $this->assertEquals($error, $basicMetaData->getErrors());
+        $this->assertTrue($basicMetaData->containsError(ApiErrors::ENCRYPTION_KEY_NOT_FOUND));
 
         $basicMetaData = new MetaData(['errors' => []]);
 
         $this->assertFalse($basicMetaData->hasErrors());
         $this->assertEquals([], $basicMetaData->getErrors());
+        $this->assertFalse($basicMetaData->containsError(ApiErrors::ENCRYPTION_KEY_NOT_FOUND));
     }
 }
