@@ -2,10 +2,8 @@
 
 namespace VaultPHP\SecretEngines\Traits;
 
-use VaultPHP\SecretEngines\Interfaces\EncryptionTypeRequestInterface;
-
 /**
- * Trait NamedRequestTrait
+ * Trait EncryptionTypeRequestTrait
  * @package VaultPHP\SecretEngines\Traits
  */
 trait EncryptionTypeRequestTrait
