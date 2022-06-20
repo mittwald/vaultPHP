@@ -19,6 +19,7 @@ Feel free to open Pull Requests to add improvements or missing functionality.
   - User/Password
   - Token
   - Kubernetes
+  - AppRole
 - Secret Engines
   - Transit Engine
     - Encrypt/Decrypt
