@@ -2,11 +2,9 @@
 <psalm
     totallyTyped="false"
     allowPhpStormGenerics="true"
-    errorLevel="2"
-    resolveFromConfigFile="true"
     allowStringToStandInForClass="true"
     findUnusedBaselineEntry="true"
-    findUnusedCode="false"
+    xmlns="https://getpsalm.org/schema/config"
 >
     <projectFiles>
         <directory name="src" />

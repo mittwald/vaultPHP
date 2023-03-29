@@ -34,7 +34,5 @@ jobs:
         run: php -v
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
-      - name: Downloading
-        run: composer psalm
       - name: Typechecking
-        run: php psalm.phar
+        run: composer psalm
