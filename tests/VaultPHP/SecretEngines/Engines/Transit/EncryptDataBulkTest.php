@@ -2,7 +2,7 @@
 
 namespace Test\VaultPHP\SecretEngines\Engines\Transit;
 
-use Test\VaultPHP\SecretEngines\SecretEngineTest;
+use Test\VaultPHP\SecretEngines\AbstractSecretEngineTestCase;
 use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptData;
 use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptDataBulkRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Response\EncryptDataResponse;
@@ -12,7 +12,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
  * Class EncryptDataBulkTest
  * @package Test\VaultPHP\SecretEngines\Transit
  */
-final class EncryptDataBulkTest extends SecretEngineTest
+final class EncryptDataBulkTest extends AbstractSecretEngineTestCase
 {
     public function testApiCall()
     {

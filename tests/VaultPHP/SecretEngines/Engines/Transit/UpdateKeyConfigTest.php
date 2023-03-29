@@ -2,7 +2,7 @@
 
 namespace Test\VaultPHP\SecretEngines\Engines\Transit;
 
-use Test\VaultPHP\SecretEngines\SecretEngineTest;
+use Test\VaultPHP\SecretEngines\AbstractSecretEngineTestCase;
 use VaultPHP\SecretEngines\Engines\Transit\Request\UpdateKeyConfigRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Response\UpdateKeyConfigResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Transit;
@@ -11,7 +11,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
  * Class UpdateKeyConfigTest
  * @package Test\VaultPHP\SecretEngines\Transit
  */
-final class UpdateKeyConfigTest extends SecretEngineTest
+final class UpdateKeyConfigTest extends AbstractSecretEngineTestCase
 {
     public function testApiCall()
     {

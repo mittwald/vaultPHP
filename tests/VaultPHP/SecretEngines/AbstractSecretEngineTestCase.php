@@ -13,7 +13,7 @@ use VaultPHP\VaultClient;
  * Class SecretEngineTest
  * @package Test\VaultPHP\SecretEngines
  */
-abstract class SecretEngineTest extends TestCase
+abstract class AbstractSecretEngineTestCase extends TestCase
 {
     protected function createApiClient($expectedMethod, $expectedPath, $expectedData, $responseData, $responseStatus = 200)
     {
