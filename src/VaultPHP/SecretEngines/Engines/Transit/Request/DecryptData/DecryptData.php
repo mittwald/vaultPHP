@@ -45,7 +45,7 @@ class DecryptData implements ArrayExportInterface
 
     /**
      * @param string $ciphertext
-     * @return $this
+     * @return self
      */
     public function setCiphertext($ciphertext)
     {
@@ -63,7 +63,7 @@ class DecryptData implements ArrayExportInterface
 
     /**
      * @param string|null $nonce
-     * @return $this
+     * @return self
      */
     public function setNonce($nonce)
     {
@@ -81,7 +81,7 @@ class DecryptData implements ArrayExportInterface
 
     /**
      * @param string|null $context
-     * @return $this
+     * @return self
      */
     public function setContext($context)
     {

@@ -45,7 +45,7 @@ class EncryptData implements ArrayExportInterface
 
     /**
      * @param string $plaintext
-     * @return $this
+     * @return self
      */
     public function setPlaintext($plaintext)
     {
@@ -63,7 +63,7 @@ class EncryptData implements ArrayExportInterface
 
     /**
      * @param string|null $nonce
-     * @return $this
+     * @return self
      */
     public function setNonce($nonce)
     {
@@ -81,7 +81,7 @@ class EncryptData implements ArrayExportInterface
 
     /**
      * @param string|null $context
-     * @return $this
+     * @return self
      */
     public function setContext($context)
     {

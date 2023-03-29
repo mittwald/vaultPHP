@@ -18,7 +18,7 @@ class EndpointResponse implements EndpointResponseInterface
      * @param array|object $data
      * @param array $meta
      */
-    public function __construct($data = [], $meta = [])
+    final public function __construct($data = [], $meta = [])
     {
         $this->metaData = new MetaData($meta);
         $this->populateData($data);
@@ -106,6 +106,6 @@ class EndpointResponse implements EndpointResponseInterface
      */
     public function hasErrors()
     {
-        return (bool) $this->getMetaData()->hasErrors();
+        return $this->getMetaData()->hasErrors();
     }
 }
