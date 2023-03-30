@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['5.6', '7.4', '8.2']
+        php-versions: ['5.6', '7.4', '8.x']
     name: Testing PHP ${{ matrix.php-versions }}
     steps:
       - name: Checkout
@@ -30,6 +30,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.x'
       - name: Check PHP Version
         run: php -v
       - name: Install Dependencies
