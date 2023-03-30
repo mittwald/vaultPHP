@@ -38,7 +38,5 @@ jobs:
         run: php -v
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
-      - name: Downloading
-        run: wget https://github.com/vimeo/psalm/releases/download/5.9.0/psalm.phar
       - name: Typechecking
-        run: php psalm.phar
+        run: composer psalm

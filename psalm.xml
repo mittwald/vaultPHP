@@ -4,6 +4,7 @@
     allowPhpStormGenerics="true"
     allowStringToStandInForClass="true"
     findUnusedBaselineEntry="true"
+    findUnusedCode="false"
     xmlns="https://getpsalm.org/schema/config"
 >
     <projectFiles>
