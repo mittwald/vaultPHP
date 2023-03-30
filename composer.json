@@ -3,7 +3,7 @@
     "type": "library",
     "license": "MIT",
     "homepage": "https://www.mittwald.de/",
-    "description": "PHP library for Vault",
+    "description": "A PHP client library for 'Vault by HashiCorp'",
     "require": {
         "ext-json": "*",
         "guzzlehttp/psr7": "^1.6",

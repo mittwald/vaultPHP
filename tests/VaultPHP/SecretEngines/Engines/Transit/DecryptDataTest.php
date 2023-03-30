@@ -2,7 +2,7 @@
 
 namespace Test\VaultPHP\SecretEngines\Engines\Transit;
 
-use Test\VaultPHP\SecretEngines\SecretEngineTest;
+use Test\VaultPHP\SecretEngines\AbstractSecretEngineTestCase;
 use VaultPHP\SecretEngines\Engines\Transit\Request\DecryptData\DecryptDataRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Response\DecryptDataResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Transit;
@@ -11,7 +11,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
  * Class DecryptDataTest
  * @package Test\VaultPHP\SecretEngines\Transit
  */
-final class DecryptDataTest extends SecretEngineTest
+final class DecryptDataTest extends AbstractSecretEngineTestCase
 {
     public function testApiCall()
     {

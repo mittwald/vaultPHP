@@ -56,7 +56,7 @@ final class UpdateKeyConfigRequest implements ResourceRequestInterface, NamedReq
      */
     public function setMinDecryptionVersion($min_decryption_version)
     {
-        $this->min_decryption_version = (int)$min_decryption_version;
+        $this->min_decryption_version = $min_decryption_version;
         return $this;
     }
 
@@ -66,7 +66,7 @@ final class UpdateKeyConfigRequest implements ResourceRequestInterface, NamedReq
      */
     public function setMinEncryptionVersion($min_encryption_version)
     {
-        $this->min_encryption_version = (int)$min_encryption_version;
+        $this->min_encryption_version = $min_encryption_version;
         return $this;
     }
 
@@ -76,7 +76,7 @@ final class UpdateKeyConfigRequest implements ResourceRequestInterface, NamedReq
      */
     public function setExportable($exportable)
     {
-        $this->exportable = (bool)$exportable;
+        $this->exportable = $exportable;
         return $this;
     }
 
@@ -86,7 +86,7 @@ final class UpdateKeyConfigRequest implements ResourceRequestInterface, NamedReq
      */
     public function setAllowPlaintextBackup($allow_plaintext_backup)
     {
-        $this->allow_plaintext_backup = (bool)$allow_plaintext_backup;
+        $this->allow_plaintext_backup = $allow_plaintext_backup;
         return $this;
     }
 

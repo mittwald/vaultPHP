@@ -9,7 +9,9 @@ use VaultPHP\Exceptions\VaultException;
 
 /**
  * Class BulkEndpointResponse
- * @package VaultPHP\Response
+ *
+ * @template-implements Iterator<int>
+ * @template-implements ArrayAccess<int, mixed>
  */
 class BulkEndpointResponse extends EndpointResponse implements Iterator, ArrayAccess, Countable
 {
@@ -48,7 +50,7 @@ class BulkEndpointResponse extends EndpointResponse implements Iterator, ArrayAc
     }
 
     /**
-     * @return mixed
+     * @return int|null
      */
     public function current()
     {
@@ -68,7 +70,7 @@ class BulkEndpointResponse extends EndpointResponse implements Iterator, ArrayAc
      */
     public function key()
     {
-        return (int) $this->iteratorPosition;
+        return $this->iteratorPosition;
     }
 
     /**

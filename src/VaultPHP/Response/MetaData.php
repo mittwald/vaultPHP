@@ -143,6 +143,6 @@ class MetaData implements MetaDataInterface
     public function hasErrors()
     {
         $errors = $this->getErrors();
-        return $errors !== NULL && is_array($errors) && count($errors) >= 1;
+        return is_array($errors) && count($errors) >= 1;
     }
 }

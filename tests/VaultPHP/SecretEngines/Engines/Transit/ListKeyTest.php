@@ -2,7 +2,7 @@
 
 namespace Test\VaultPHP\SecretEngines\Engines\Transit;
 
-use Test\VaultPHP\SecretEngines\SecretEngineTest;
+use Test\VaultPHP\SecretEngines\AbstractSecretEngineTestCase;
 use VaultPHP\SecretEngines\Engines\Transit\Response\ListKeysResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Transit;
 
@@ -10,7 +10,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
  * Class ListKeyTest
  * @package Test\VaultPHP\SecretEngines\Transit
  */
-final class ListKeyTest extends SecretEngineTest
+final class ListKeyTest extends AbstractSecretEngineTestCase
 {
     public function testApiCall()
     {

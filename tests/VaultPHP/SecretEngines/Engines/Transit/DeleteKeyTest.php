@@ -2,7 +2,7 @@
 
 namespace Test\VaultPHP\SecretEngines\Engines\Transit;
 
-use Test\VaultPHP\SecretEngines\SecretEngineTest;
+use Test\VaultPHP\SecretEngines\AbstractSecretEngineTestCase;
 use VaultPHP\SecretEngines\Engines\Transit\Response\DeleteKeyResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Transit;
 
@@ -10,7 +10,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
  * Class DeleteKeyTest
  * @package Test\VaultPHP\SecretEngines\Transit
  */
-final class DeleteKeyTest extends SecretEngineTest
+final class DeleteKeyTest extends AbstractSecretEngineTestCase
 {
     public function testApiCall()
     {

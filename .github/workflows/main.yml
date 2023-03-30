@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['5.6', '7.4', '8.0']
+        php-versions: ['5.x', '7.x', '8.x']
     name: Testing PHP ${{ matrix.php-versions }}
     steps:
       - name: Checkout
@@ -26,15 +26,19 @@ jobs:
         run: composer test
   typecheck:
     runs-on: ubuntu-latest
-    name: Typechecks against PSALM
+    name: TypeChecks against PSALM
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.x'
       - name: Check PHP Version
         run: php -v
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
       - name: Downloading
-        run: wget https://github.com/vimeo/psalm/releases/download/3.12.1/psalm.phar
+        run: wget https://github.com/vimeo/psalm/releases/download/5.9.0/psalm.phar
       - name: Typechecking
         run: php psalm.phar

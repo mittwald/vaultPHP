@@ -19,14 +19,17 @@ class AppRole extends AbstractAuthenticationProvider
 {
     /** @var string */
     private $roleId;
+
+    /** @var string */
     private $secretId;
 
-      /** @var string  */
-      private $endpoint = '/v1/auth/approle/login';
+    /** @var string  */
+    private $endpoint = '/v1/auth/approle/login';
 
     /**
      * AppRole constructor.
-     * @param string $AppRole
+     * @param $roleId
+     * @param $secretId
      */
     public function __construct($roleId, $secretId)
     {

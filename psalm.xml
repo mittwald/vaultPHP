@@ -2,12 +2,10 @@
 <psalm
     totallyTyped="false"
     allowPhpStormGenerics="true"
-    errorLevel="2"
-    resolveFromConfigFile="true"
     allowStringToStandInForClass="true"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
     xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
         <directory name="src" />
