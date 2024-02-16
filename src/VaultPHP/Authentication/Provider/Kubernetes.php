@@ -22,17 +22,19 @@ class Kubernetes extends AbstractAuthenticationProvider
     /** @var string */
     private $jwt;
     /** @var string  */
-    private $endpoint = '/v1/auth/kubernetes/login';
+    private $endpoint;
 
     /**
      * Kubernetes constructor.
      * @param string $role
      * @param string $jwt
+     * @param string $authPath - defaults to '/auth/kubernetes'
      */
-    public function __construct($role, $jwt)
+    public function __construct($role, $jwt, $authPath = '/auth/kubernetes')
     {
         $this->role = $role;
         $this->jwt = $jwt;
+        $this->endpoint = '/v1' . $authPath . '/login';
     }
 
     /**
