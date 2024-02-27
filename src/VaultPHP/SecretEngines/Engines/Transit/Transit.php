@@ -29,6 +29,13 @@ use VaultPHP\SecretEngines\Engines\Transit\Response\UpdateKeyConfigResponse;
  */
 final class Transit extends AbstractSecretEngine
 {
+    private string $APIPath = 'transit';
+
+    public function setAPIPath(string $path)
+    {
+        $this->APIPath = $path;
+    }
+
     /**
      * @param CreateKeyRequest $createKeyRequest
      * @return CreateKeyResponse
@@ -41,7 +48,7 @@ final class Transit extends AbstractSecretEngine
         /** @var CreateKeyResponse */
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/transit/keys/%s', urlencode($createKeyRequest->getName())),
+            sprintf('/v1/%s/keys/%s', $this->APIPath, urlencode($createKeyRequest->getName())),
             CreateKeyResponse::class,
             $createKeyRequest
         );
@@ -59,7 +66,7 @@ final class Transit extends AbstractSecretEngine
         /** @var EncryptDataResponse */
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/transit/encrypt/%s', urlencode($encryptDataRequest->getName())),
+            sprintf('/v1/%s/encrypt/%s', $this->APIPath, urlencode($encryptDataRequest->getName())),
             EncryptDataResponse::class,
             $encryptDataRequest
         );
@@ -77,7 +84,7 @@ final class Transit extends AbstractSecretEngine
         /** @var BulkEndpointResponse */
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/transit/encrypt/%s', urlencode($encryptDataBulkRequest->getName())),
+            sprintf('/v1/%s/encrypt/%s', $this->APIPath, urlencode($encryptDataBulkRequest->getName())),
             EncryptDataResponse::class,
             $encryptDataBulkRequest
         );
@@ -95,7 +102,7 @@ final class Transit extends AbstractSecretEngine
         /** @var DecryptDataResponse */
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/transit/decrypt/%s', urlencode($decryptDataRequest->getName())),
+            sprintf('/v1/%s/decrypt/%s', $this->APIPath, urlencode($decryptDataRequest->getName())),
             DecryptDataResponse::class,
             $decryptDataRequest
         );
@@ -115,7 +122,7 @@ final class Transit extends AbstractSecretEngine
         /** @var BulkEndpointResponse */
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/transit/decrypt/%s', urlencode($decryptDataBulkRequest->getName())),
+            sprintf('/v1/%s/decrypt/%s', $this->APIPath, urlencode($decryptDataBulkRequest->getName())),
             DecryptDataResponse::class,
             $decryptDataBulkRequest
         );
@@ -132,7 +139,7 @@ final class Transit extends AbstractSecretEngine
         /** @var ListKeysResponse */
         return $this->vaultClient->sendApiRequest(
             'LIST',
-            '/v1/transit/keys',
+            sprintf('/v1/%s/keys', $this->APIPath,),
             ListKeysResponse::class,
             []
         );
@@ -150,7 +157,7 @@ final class Transit extends AbstractSecretEngine
         /** @var EndpointResponse */
         return $this->vaultClient->sendApiRequest(
             'DELETE',
-            sprintf('/v1/transit/keys/%s', urlencode($name)),
+            sprintf('/v1/%s/keys/%s', $this->APIPath, urlencode($name)),
             DeleteKeyResponse::class,
             []
         );
@@ -168,7 +175,7 @@ final class Transit extends AbstractSecretEngine
         /** @var UpdateKeyConfigResponse */
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/transit/keys/%s/config', urlencode($updateKeyConfigRequest->getName())),
+            sprintf('/v1/%s/keys/%s/config', $this->APIPath, urlencode($updateKeyConfigRequest->getName())),
             UpdateKeyConfigResponse::class,
             $updateKeyConfigRequest
         );
