@@ -92,10 +92,7 @@ final class ExceptionsTest extends TestCase
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
         $client->sendApiRequest('GET', '/foo', EndpointResponse::class);
     }
-    
-    /**
-     * @requires PHP <= 7.4
-     */
+
     public function testWillThrowWhenReturnClassDeclarationIsInvalid() {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Return Class declaration lacks static::fromResponse');
@@ -114,7 +111,7 @@ final class ExceptionsTest extends TestCase
             ]));
 
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
-        $client->sendApiRequest('GET', '/foo', [], MetaData::class);
+        $client->sendApiRequest('GET', '/foo', "", MetaData::class);
     }
 
     public function testWillThrowWhenReturnClassDeclarationIsInvalidForBulk() {
