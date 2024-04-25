@@ -29,8 +29,15 @@ use VaultPHP\SecretEngines\Engines\Transit\Response\UpdateKeyConfigResponse;
  */
 final class Transit extends AbstractSecretEngine
 {
-    private string $APIPath = 'transit';
+    /**
+     * @var string
+     */
+    private $APIPath = 'transit';
 
+    /**
+     * @param string $path
+     * @return void
+     */
     public function setAPIPath(string $path)
     {
         $this->APIPath = $path;

@@ -28,10 +28,10 @@ class AppRole extends AbstractAuthenticationProvider
 
     /**
      * AppRole constructor.
-     * @param $roleId
-     * @param $secretId
+     * @param string $roleId
+     * @param string $secretId
      */
-    public function __construct($roleId, $secretId)
+    public function __construct(string $roleId, string $secretId)
     {
         $this->roleId = $roleId;
         $this->secretId= $secretId;

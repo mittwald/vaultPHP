@@ -45,7 +45,8 @@ class BulkEndpointResponse extends EndpointResponse implements Iterator, ArrayAc
     /**
      * @return array
      */
-    public function getBatchResults() {
+    public function getBatchResults(): array
+    {
         return $this->batch_results;
     }
 

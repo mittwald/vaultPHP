@@ -3,7 +3,7 @@
 namespace VaultPHP;
 
 use GuzzleHttp\Psr7\Request;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use VaultPHP\Authentication\AuthenticationMetaData;
@@ -27,7 +27,7 @@ class VaultClient
     /** @var string */
     private $apiHost;
 
-    /** @var HttpClient */
+    /** @var ClientInterface */
     private $httpClient;
 
     /** @var AuthenticationProviderInterface */
@@ -38,12 +38,12 @@ class VaultClient
 
     /**
      * VaultClient constructor.
-     * @param HttpClient $httpClient
+     * @param ClientInterface $httpClient
      * @param AuthenticationProviderInterface $authProvider
      * @param string $apiHost
      */
     public function __construct(
-        HttpClient $httpClient,
+        ClientInterface $httpClient,
         AuthenticationProviderInterface $authProvider,
         $apiHost
     )

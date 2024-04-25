@@ -28,7 +28,8 @@ class EndpointResponse implements EndpointResponseInterface
      * @param $response
      * @return array
      */
-    protected static function getResponseContent(ResponseInterface $response) {
+    protected static function getResponseContent(ResponseInterface $response): array
+    {
         $responseBody = $response->getBody();
         $responseBody->rewind();
         $responseBodyContents = $responseBody->getContents();
