@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['5.x', '7.x', '8.x']
+        php-versions: ['7.x', '8.x']
     name: Testing PHP ${{ matrix.php-versions }}
     steps:
       - name: Checkout
