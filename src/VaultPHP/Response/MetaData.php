@@ -129,7 +129,7 @@ class MetaData implements MetaDataInterface
         foreach ($this->getErrors() as $apiError) {
             /** @var string $errorMessage */
             foreach ($error as $errorMessage) {
-                if (preg_match("#${errorMessage}#i", $apiError)) {
+                if (preg_match("#{$errorMessage}#i", $apiError)) {
                     return true;
                 }
             }
