@@ -3,8 +3,8 @@
 namespace Test\VaultPHP\Response;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Client\HttpClient;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Test\VaultPHP\Mocks\InvalidEndpointResponseMock;
@@ -37,7 +37,7 @@ final class ExceptionsTest extends TestCase
         $this->expectExceptionMessage('can\'t parse provided apiHost - malformed uri');
 
         $auth = new Token('fooToken');
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
 
         $client = new VaultClient($httpClient, $auth, "imInvalidHost");
         $client->sendApiRequest('LOL', '/i/should/be/preserved', EndpointResponse::class, ['dontReplaceMe']);
@@ -46,7 +46,7 @@ final class ExceptionsTest extends TestCase
     public function testAuthenticateWillThrowWhenNoTokenIsReturned() {
         $this->expectException(VaultAuthenticationException::class);
 
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
         $httpClient
             ->expects($this->once())
             ->method('sendRequest')
@@ -61,7 +61,7 @@ final class ExceptionsTest extends TestCase
     public function testWillThrowWhenAPIReturns403() {
         $this->expectException(VaultAuthenticationException::class);
 
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
         $auth = $this->createMock(AuthenticationProviderInterface::class);
         $auth
             ->expects($this->once())
@@ -76,7 +76,7 @@ final class ExceptionsTest extends TestCase
         $this->expectException(VaultHttpException::class);
         $this->expectExceptionMessage('foobarMessage');
 
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
         $httpClient
             ->expects($this->once())
             ->method('sendRequest')
@@ -97,7 +97,7 @@ final class ExceptionsTest extends TestCase
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Return Class declaration lacks static::fromResponse');
 
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
         $httpClient
             ->expects($this->once())
             ->method('sendRequest')
@@ -118,7 +118,7 @@ final class ExceptionsTest extends TestCase
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Return Class declaration lacks static::fromBulkResponse');
 
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
         $httpClient
             ->expects($this->once())
             ->method('sendRequest')
@@ -139,7 +139,7 @@ final class ExceptionsTest extends TestCase
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Result from "fromResponse/fromBulkResponse" isn\'t an instance of EndpointResponse');
 
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
         $httpClient
             ->expects($this->once())
             ->method('sendRequest')

@@ -3,7 +3,7 @@
 namespace Test\VaultPHP;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use VaultPHP\Authentication\Provider\Token;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\VaultClient;
@@ -29,7 +29,7 @@ trait TestHelperTrait {
         $response = new Response($responseStatus, $responseHeader, $responseBody);
         $auth = new Token('fooToken');
 
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
 
         $httpClient
             ->expects($this->once())

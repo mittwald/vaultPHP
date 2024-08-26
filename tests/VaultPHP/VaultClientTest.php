@@ -3,8 +3,8 @@
 namespace Test\VaultPHP;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Client\HttpClient;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Test\VaultPHP\Mocks\EndpointResponseMock;
 use VaultPHP\Authentication\AuthenticationProviderInterface;
@@ -23,7 +23,7 @@ final class VaultClientTest extends TestCase
     public function testAuthProviderGetsClientInjected()
     {
         $auth = new Token('foo');
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
 
         $this->assertSame($client, $auth->getVaultClient());
@@ -32,7 +32,7 @@ final class VaultClientTest extends TestCase
     public function testRequestWillExtendedWithDefaultVars() {
         $auth = new Token('fooToken');
 
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
         $httpClient
             ->expects($this->once())
             ->method('sendRequest')
@@ -61,7 +61,7 @@ final class VaultClientTest extends TestCase
     public function testSendRequest() {
         $response = new Response();
 
-        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient = $this->createMock(ClientInterface::class);
         $httpClient
             ->expects($this->once())
             ->method('sendRequest')
