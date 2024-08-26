@@ -15,12 +15,14 @@ use VaultPHP\SecretEngines\Engines\Transit\Request\DecryptData\DecryptDataBulkRe
 use VaultPHP\SecretEngines\Engines\Transit\Request\DecryptData\DecryptDataRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptDataBulkRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptDataRequest;
+use VaultPHP\SecretEngines\Engines\Transit\Request\SignDataRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Request\UpdateKeyConfigRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Response\CreateKeyResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\DecryptDataResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\DeleteKeyResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\EncryptDataResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\ListKeysResponse;
+use VaultPHP\SecretEngines\Engines\Transit\Response\SignDataResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\UpdateKeyConfigResponse;
 
 /**
@@ -185,6 +187,23 @@ final class Transit extends AbstractSecretEngine
             sprintf('/v1/%s/keys/%s/config', $this->APIPath, urlencode($updateKeyConfigRequest->getName())),
             UpdateKeyConfigResponse::class,
             $updateKeyConfigRequest
+        );
+    }
+
+    /**
+     * @param SignDataRequest $signDataRequest
+     * @return SignDataResponse
+     * @throws InvalidDataException
+     * @throws InvalidRouteException
+     * @throws VaultException
+     */
+    public function sign(SignDataRequest $signDataRequest)
+    {
+        return $this->vaultClient->sendApiRequest(
+            'POST',
+            sprintf('/v1/%s/sign/%s/%s', $this->APIPath, urlencode($signDataRequest->getKey()), $signDataRequest->getHashAlgorithm()),
+            SignDataResponse::class,
+            $signDataRequest
         );
     }
 }
