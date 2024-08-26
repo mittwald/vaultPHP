@@ -3,8 +3,8 @@
 namespace Test\VaultPHP\SecretEngines;
 
 use GuzzleHttp\Psr7\Response;
-use Http\Client\HttpClient;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use VaultPHP\Authentication\Provider\Token;
 use VaultPHP\VaultClient;
@@ -17,7 +17,7 @@ abstract class AbstractSecretEngineTestCase extends TestCase
 {
     protected function createApiClient($expectedMethod, $expectedPath, $expectedData, $responseData, $responseStatus = 200)
     {
-        $httpMock = $this->createMock(HttpClient::class);
+        $httpMock = $this->createMock(ClientInterface::class);
         $httpMock
             ->expects($this->once())
             ->method('sendRequest')
