@@ -6,9 +6,9 @@
     "description": "A PHP client library for 'Vault by HashiCorp'",
     "require": {
         "ext-json": "*",
-        "guzzlehttp/psr7": "2.6.2",
+        "guzzlehttp/psr7": "^2.6",
         "php": "^7.2.5 || ^8.0",
-        "php-http/httplug": "2.4.0"
+        "php-http/httplug": "^2.4"
     },
     "suggest": {
         "php-http/curl-client": "CURL Client Adapter",
