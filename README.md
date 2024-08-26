@@ -27,6 +27,7 @@ Feel free to open Pull Requests to add improvements or missing functionality.
     - Create Key
     - Delete Key
     - List Keys
+    - Sign Data
 
 ## Basic Usage
 
