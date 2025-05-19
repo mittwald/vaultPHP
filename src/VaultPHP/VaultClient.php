@@ -233,15 +233,18 @@ class VaultClient
         $token = $this->authenticationMetaData ? $this->authenticationMetaData->getClientToken() : '';
         $hostEndpoint = parse_url($this->apiHost);
 
-        if (!is_array($hostEndpoint) || !isset($hostEndpoint['scheme']) || !isset($hostEndpoint['host']) || !isset($hostEndpoint['port'])) {
+        if (!is_array($hostEndpoint) || !isset($hostEndpoint['scheme']) || !isset($hostEndpoint['host'])) {
             throw new VaultException('can\'t parse provided apiHost - malformed uri');
         }
 
         $uriWithHost = $request
             ->getUri()
             ->withScheme($hostEndpoint['scheme'])
-            ->withHost($hostEndpoint['host'])
-            ->withPort($hostEndpoint['port']);
+            ->withHost($hostEndpoint['host']);
+
+        if (isset($hostEndpoint['port'])) {
+            $uriWithHost = $uriWithHost->withPort($hostEndpoint['port']);
+        }
 
         return $request
             ->withUri($uriWithHost)
