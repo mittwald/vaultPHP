@@ -11,11 +11,11 @@ interface NamedRequestInterface
     /**
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * @param string $name
-     * @return $this
+     * @return static
      */
-    public function setName($name);
+    public function setName(string $name): static;
 }

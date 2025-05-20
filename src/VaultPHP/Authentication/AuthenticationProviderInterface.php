@@ -14,17 +14,17 @@ interface AuthenticationProviderInterface
     /**
      * @return AuthenticationMetaData|boolean
      */
-    public function authenticate();
+    public function authenticate(): AuthenticationMetaData|bool;
 
     /**
      * @param VaultClient $VaultClient
      * @return void
      */
-    public function setVaultClient(VaultClient $VaultClient);
+    public function setVaultClient(VaultClient $VaultClient): void;
 
     /**
      * @return VaultClient
      * @throws VaultException
      */
-    public function getVaultClient();
+    public function getVaultClient(): VaultClient;
 }

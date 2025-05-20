@@ -6,6 +6,6 @@ namespace VaultPHP\Exceptions;
  * Class InvalidDataException
  * @package VaultPHP\Exceptions
  */
-class InvalidDataException extends VaultResponseException
+final class InvalidDataException extends VaultResponseException
 {
 }

@@ -3,8 +3,14 @@
 namespace Test\VaultPHP;
 
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\MockObject\Exception;
 use Psr\Http\Client\ClientInterface;
 use VaultPHP\Authentication\Provider\Token;
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultAuthenticationException;
+use VaultPHP\Exceptions\VaultException;
+use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\VaultClient;
 
@@ -15,17 +21,18 @@ use VaultPHP\VaultClient;
 trait TestHelperTrait {
 
     /**
-     * @param $responseStatus
+     * @param int $responseStatus
      * @param string $responseBody
      * @param array $responseHeader
      * @return mixed
-     * @throws \VaultPHP\Exceptions\InvalidDataException
-     * @throws \VaultPHP\Exceptions\InvalidRouteException
-     * @throws \VaultPHP\Exceptions\VaultAuthenticationException
-     * @throws \VaultPHP\Exceptions\VaultException
-     * @throws \VaultPHP\Exceptions\VaultHttpException
+     * @throws InvalidDataException
+     * @throws InvalidRouteException
+     * @throws VaultAuthenticationException
+     * @throws VaultException
+     * @throws VaultHttpException|Exception
      */
-    private function simulateApiResponse($responseStatus, $responseBody = '', $responseHeader = []) {
+    private function simulateApiResponse(int $responseStatus, string $responseBody = '', array $responseHeader = []): mixed
+    {
         $response = new Response($responseStatus, $responseHeader, $responseBody);
         $auth = new Token('fooToken');
 

@@ -31,24 +31,29 @@ final class SignDataRequest  implements ResourceRequestInterface
     const SIGNATURE_ALGORITHM_PKCS1V15 = 'pkcs1v15';
 
     /** @var string */
-    protected $key;
+    protected string $key;
 
     /** @var string */
-    protected $hashAlgorithm;
+    protected string $hashAlgorithm;
 
     /** @var string */
-    protected $input;
+    protected string $input;
 
     /** @var string */
-    protected $signature_algorithm;
+    protected string $signature_algorithm;
 
     /**
      * @param string $key
+     * @param string $hashAlgorithm
      * @param string $input
      * @param string $signature_algorithm
      */
-    public function __construct($key, $hashAlgorithm, $input, $signature_algorithm = self::SIGNATURE_ALGORITHM_PSS)
-    {
+    public function __construct(
+        string $key,
+        string $hashAlgorithm,
+        string $input,
+        string $signature_algorithm = self::SIGNATURE_ALGORITHM_PSS
+    ) {
         $this->key = $key;
         $this->hashAlgorithm = $hashAlgorithm;
         $this->input = $input;
@@ -58,7 +63,7 @@ final class SignDataRequest  implements ResourceRequestInterface
     /**
      * @return string
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
@@ -66,31 +71,16 @@ final class SignDataRequest  implements ResourceRequestInterface
     /**
      * @return string
      */
-    public function getHashAlgorithm()
+    public function getHashAlgorithm(): string
     {
         return $this->hashAlgorithm;
     }
 
     /**
-     * @return string
-     */
-    public function getInput()
-    {
-        return $this->input;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSignatureAlgorithm()
-    {
-        return $this->signature_algorithm;
-    }
-
-    /**
      * @return array
      */
-    public function toArray()
+    #[\Override]
+    public function toArray(): array
     {
         return [
             'input' => $this->input,

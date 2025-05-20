@@ -23,7 +23,7 @@ final class DecryptDataBulkRequest implements BulkResourceRequestInterface, Name
      * @param string $name
      * @param DecryptData[] $batchRequests
      */
-    public function __construct($name, $batchRequests = [])
+    public function __construct(string $name, $batchRequests = [])
     {
         $this->setName($name);
         $this->addBulkRequests($batchRequests);

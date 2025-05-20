@@ -11,12 +11,12 @@ use VaultPHP\Response\EndpointResponse;
 final class ListKeysResponse extends EndpointResponse
 {
     /** @var string[] */
-    protected $keys = [];
+    protected array $keys = [];
 
     /**
-     * @return mixed
+     * @return string[]
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         return $this->keys;
     }

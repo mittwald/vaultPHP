@@ -12,22 +12,24 @@ use VaultPHP\VaultClient;
 abstract class AbstractAuthenticationProvider implements AuthenticationProviderInterface
 {
     /** @var VaultClient|null */
-    private $vaultClient;
+    private ?VaultClient $vaultClient;
 
     /**
      * @param VaultClient $VaultClient
      * @return void
      */
-    public function setVaultClient(VaultClient $VaultClient)
+    #[\Override]
+    public function setVaultClient(VaultClient $VaultClient): void
     {
         $this->vaultClient = $VaultClient;
     }
 
     /**
-     * @return VaultClient
      * @throws VaultException
+     * @return VaultClient
      */
-    public function getVaultClient()
+    #[\Override]
+    public function getVaultClient(): VaultClient
     {
         if (!$this->vaultClient) {
             throw new VaultException('Trying to request the VaultClient before initialization');

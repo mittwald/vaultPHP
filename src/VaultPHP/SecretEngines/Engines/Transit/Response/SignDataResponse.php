@@ -9,12 +9,12 @@ use VaultPHP\Response\EndpointResponse;
 final class SignDataResponse extends EndpointResponse
 {
     /** @var string */
-    protected $signature = '';
+    protected string $signature = '';
 
     /**
      * @return string
      */
-    public function getSignature()
+    public function getSignature(): string
     {
         return $this->signature;
     }

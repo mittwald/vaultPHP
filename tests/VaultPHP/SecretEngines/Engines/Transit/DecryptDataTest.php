@@ -3,6 +3,9 @@
 namespace Test\VaultPHP\SecretEngines\Engines\Transit;
 
 use Test\VaultPHP\SecretEngines\AbstractSecretEngineTestCase;
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultException;
 use VaultPHP\SecretEngines\Engines\Transit\Request\DecryptData\DecryptDataRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Response\DecryptDataResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Transit;
@@ -13,7 +16,12 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
  */
 final class DecryptDataTest extends AbstractSecretEngineTestCase
 {
-    public function testApiCall()
+    /**
+     * @throws InvalidDataException
+     * @throws VaultException
+     * @throws InvalidRouteException
+     */
+    public function testApiCall(): void
     {
         $decryptDataRequest = new DecryptDataRequest('fooName', 'fooCipher');
         $decryptDataRequest->setNonce('fooNonce');
@@ -32,10 +40,7 @@ final class DecryptDataTest extends AbstractSecretEngineTestCase
 
         $api = new Transit($client);
         $response = $api->decryptData($decryptDataRequest);
-
-        $this->assertInstanceOf(DecryptDataResponse::class, $response);
         $this->assertEquals('fooBar', $response->getPlaintext());
-
         $this->assertEquals('fooName', $decryptDataRequest->getName());
         $this->assertEquals('fooContext', $decryptDataRequest->getContext());
         $this->assertEquals('fooNonce', $decryptDataRequest->getNonce());

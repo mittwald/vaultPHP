@@ -15,7 +15,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Response\DecryptDataResponse;
  */
 final class BulkEndpointResponseTest extends TestCase
 {
-    public function testCanInteractWithBulkResponseLikeArray()
+    public function testCanInteractWithBulkResponseLikeArray(): void
     {
         $response = new Response(200, [], json_encode([
             'data' => [
@@ -27,9 +27,6 @@ final class BulkEndpointResponseTest extends TestCase
             ],
         ]));
         $bulkResponses = DecryptDataResponse::fromBulkResponse($response);
-        $this->assertInstanceOf(BulkEndpointResponse::class, $bulkResponses);
-        $this->assertTrue(is_array($bulkResponses->getBatchResults()));
-
         // test foreach
         foreach ($bulkResponses as $batchResponse) {
             $this->assertInstanceOf(DecryptDataResponse::class, $batchResponse);
@@ -61,7 +58,7 @@ final class BulkEndpointResponseTest extends TestCase
         $this->assertFalse(isset($bulkResponses[3]));
     }
 
-    public function testCantWriteToArrayStyleObject() {
+    public function testCantWriteToArrayStyleObject(): void {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('readonly');
 
@@ -78,7 +75,7 @@ final class BulkEndpointResponseTest extends TestCase
         $bulkResponses[1] = "foo";
     }
 
-    public function testCantDeleteFromArrayStyleObject() {
+    public function testCantDeleteFromArrayStyleObject(): void {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('readonly');
 
@@ -95,7 +92,7 @@ final class BulkEndpointResponseTest extends TestCase
         unset($bulkResponses[1]);
     }
 
-    public function testHasErrors() {
+    public function testHasErrors(): void {
         $response = new Response(200, [], json_encode([
             'errors' => [],
             'data' => [
@@ -137,7 +134,7 @@ final class BulkEndpointResponseTest extends TestCase
         $this->assertTrue($bulkResponses->hasErrors());
     }
 
-    public function testGetErrors() {
+    public function testGetErrors(): void {
         $response = new Response(200, [], json_encode([
             'errors' => [
                 'foo',
@@ -161,7 +158,7 @@ final class BulkEndpointResponseTest extends TestCase
         $this->assertEquals(['foo', 'bar'], $bulkResponses->getMetaData()->getErrors());
     }
 
-    public function testCanGetPopulateMetaDataFromBulkResponse()
+    public function testCanGetPopulateMetaDataFromBulkResponse(): void
     {
         $response = new Response(200, [], json_encode([
             'errors' => [
@@ -198,7 +195,7 @@ final class BulkEndpointResponseTest extends TestCase
         $this->assertEquals(['batchError2'], $arrayEndpointResponse[2]->getMetaData()->getErrors());
     }
 
-    public function testBulkPayloadWillBePopulatedToResponseClass()
+    public function testBulkPayloadWillBePopulatedToResponseClass(): void
     {
         $batchResponse = [
             ['plaintext' => base64_encode('OH NO')],
@@ -213,6 +210,7 @@ final class BulkEndpointResponseTest extends TestCase
 
         $arrayEndpointResponse = DecryptDataResponse::fromBulkResponse($response);
         foreach($arrayEndpointResponse as $bulkResponse) {
+            /** @var DecryptDataResponse $bulkResponse */
             $expected = array_map('base64_decode', current($batchResponse));
             $this->assertEquals(current($expected), $bulkResponse->getPlaintext());
             next($batchResponse);

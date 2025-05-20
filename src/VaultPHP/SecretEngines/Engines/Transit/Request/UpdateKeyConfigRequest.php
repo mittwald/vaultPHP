@@ -17,116 +17,102 @@ final class UpdateKeyConfigRequest implements ResourceRequestInterface, NamedReq
     use NamedRequestTrait;
 
     /** @var int|null */
-    protected $min_decryption_version;
+    protected ?int $min_decryption_version = null;
 
     /** @var int|null */
-    protected $min_encryption_version;
+    protected ?int $min_encryption_version = null;
 
     /** @var boolean|null */
-    protected $exportable;
+    protected ?bool $exportable = null;
 
     /** @var boolean|null */
-    protected $allow_plaintext_backup;
+    protected ?bool $allow_plaintext_backup = null;
 
     /** @var boolean|null */
-    protected $deletion_allowed;
-
-    /**
-     * UpdateKeyConfigRequest constructor.
-     * @param string $name
-     */
-    public function __construct($name)
-    {
-        $this->setName($name);
-    }
-
-    /**
-     * @param $allow boolean
-     * @return $this
-     */
-    public function setDeletionAllowed($allow)
-    {
-        $this->deletion_allowed = (boolean)$allow;
-        return $this;
-    }
-
-    /**
-     * @param int $min_decryption_version
-     * @return $this
-     */
-    public function setMinDecryptionVersion($min_decryption_version)
-    {
-        $this->min_decryption_version = $min_decryption_version;
-        return $this;
-    }
-
-    /**
-     * @param int $min_encryption_version
-     * @return $this
-     */
-    public function setMinEncryptionVersion($min_encryption_version)
-    {
-        $this->min_encryption_version = $min_encryption_version;
-        return $this;
-    }
-
-    /**
-     * @param bool $exportable
-     * @return $this
-     */
-    public function setExportable($exportable)
-    {
-        $this->exportable = $exportable;
-        return $this;
-    }
-
-    /**
-     * @param bool $allow_plaintext_backup
-     * @return $this
-     */
-    public function setAllowPlaintextBackup($allow_plaintext_backup)
-    {
-        $this->allow_plaintext_backup = $allow_plaintext_backup;
-        return $this;
-    }
+    protected ?bool $deletion_allowed = null;
 
     /**
      * @return int|null
      */
-    public function getMinDecryptionVersion()
+    public function getMinDecryptionVersion(): ?int
     {
         return $this->min_decryption_version;
     }
 
     /**
+     * @param int|null $min_decryption_version
+     * @return void
+     */
+    public function setMinDecryptionVersion(?int $min_decryption_version): void
+    {
+        $this->min_decryption_version = $min_decryption_version;
+    }
+
+    /**
      * @return int|null
      */
-    public function getMinEncryptionVersion()
+    public function getMinEncryptionVersion(): ?int
     {
         return $this->min_encryption_version;
     }
 
     /**
+     * @param int|null $min_encryption_version
+     * @return void
+     */
+    public function setMinEncryptionVersion(?int $min_encryption_version): void
+    {
+        $this->min_encryption_version = $min_encryption_version;
+    }
+
+    /**
      * @return bool|null
      */
-    public function getExportable()
+    public function getExportable(): ?bool
     {
         return $this->exportable;
     }
 
     /**
-     * @return bool|null
+     * @param bool|null $exportable
+     * @return void
      */
-    public function getAllowPlaintextBackup()
+    public function setExportable(?bool $exportable): void
     {
-        return $this->allow_plaintext_backup;
+        $this->exportable = $exportable;
     }
 
     /**
      * @return bool|null
      */
-    public function getDeletionAllowed()
+    public function getAllowPlaintextBackup(): ?bool
+    {
+        return $this->allow_plaintext_backup;
+    }
+
+    /**
+     * @param bool|null $allow_plaintext_backup
+     * @return void
+     */
+    public function setAllowPlaintextBackup(?bool $allow_plaintext_backup): void
+    {
+        $this->allow_plaintext_backup = $allow_plaintext_backup;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getDeletionAllowed(): ?bool
     {
         return $this->deletion_allowed;
+    }
+
+    /**
+     * @param bool|null $deletion_allowed
+     * @return void
+     */
+    public function setDeletionAllowed(?bool $deletion_allowed): void
+    {
+        $this->deletion_allowed = $deletion_allowed;
     }
 }

@@ -15,16 +15,16 @@ use VaultPHP\Response\EndpointResponse;
  * Class AppRole
  * @package VaultPHP\Authentication\Provider
  */
-class AppRole extends AbstractAuthenticationProvider
+final class AppRole extends AbstractAuthenticationProvider
 {
     /** @var string */
-    private $roleId;
+    private string $roleId;
 
     /** @var string */
-    private $secretId;
+    private string $secretId;
 
     /** @var string  */
-    private $endpoint = '/v1/auth/approle/login';
+    private string $endpoint = '/v1/auth/approle/login';
 
     /**
      * AppRole constructor.
@@ -38,14 +38,16 @@ class AppRole extends AbstractAuthenticationProvider
     }
 
     /**
-     * @return bool|AuthenticationMetaData
+     * @return AuthenticationMetaData|false
+     *
      * @throws InvalidDataException
      * @throws InvalidRouteException
      * @throws VaultAuthenticationException
      * @throws VaultException
      * @throws VaultHttpException
      */
-    public function authenticate()
+    #[\Override]
+    public function authenticate(): bool|AuthenticationMetaData
     {
         /** @var EndpointResponse $response */
         $response = $this->getVaultClient()->sendApiRequest(

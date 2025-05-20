@@ -14,7 +14,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
  */
 final class CreateKeyTest extends AbstractSecretEngineTestCase
 {
-    public function testApiCall()
+    public function testApiCall(): void
     {
         $createKey = new CreateKeyRequest('foobar');
         $createKey->setType(EncryptionType::CHA_CHA_20_POLY_1305);

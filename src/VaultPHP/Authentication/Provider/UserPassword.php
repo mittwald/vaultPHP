@@ -15,35 +15,37 @@ use VaultPHP\Response\EndpointResponse;
  * Class UserPassword
  * @package VaultPHP\Authentication\Provider
  */
-class UserPassword extends AbstractAuthenticationProvider
+final class UserPassword extends AbstractAuthenticationProvider
 {
     /** @var string */
-    private $username;
+    private string $username;
     /** @var string */
-    private $password;
+    private string $password;
     /** @var string */
-    private $endpoint = '/v1/auth/userpass/login/%s';
+    private string $endpoint = '/v1/auth/userpass/login/%s';
 
     /**
      * UserPassword constructor.
      * @param string $username
      * @param string $password
      */
-    public function __construct($username, $password)
+    public function __construct(string $username, string $password)
     {
         $this->username = $username;
         $this->password = $password;
     }
 
     /**
-     * @return bool|AuthenticationMetaData
+     * @return AuthenticationMetaData|false
+     *
      * @throws InvalidDataException
      * @throws InvalidRouteException
      * @throws VaultAuthenticationException
      * @throws VaultException
      * @throws VaultHttpException
      */
-    public function authenticate()
+    #[\Override]
+    public function authenticate(): AuthenticationMetaData|bool
     {
         /** @var EndpointResponse $response */
         $response = $this->getVaultClient()->sendApiRequest(
@@ -66,7 +68,7 @@ class UserPassword extends AbstractAuthenticationProvider
     /**
      * @return string
      */
-    private function getAuthUrl()
+    private function getAuthUrl(): string
     {
         return sprintf($this->endpoint, urlencode($this->username));
     }

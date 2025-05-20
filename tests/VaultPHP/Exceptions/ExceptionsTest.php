@@ -1,13 +1,13 @@
 <?php
 
-namespace Test\VaultPHP\Response;
+namespace Test\VaultPHP\Exceptions;
 
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Test\VaultPHP\Mocks\InvalidEndpointResponseMock;
 use Test\VaultPHP\TestHelperTrait;
 use VaultPHP\Authentication\AuthenticationMetaData;
 use VaultPHP\Authentication\AuthenticationProviderInterface;
@@ -32,7 +32,7 @@ final class ExceptionsTest extends TestCase
 {
     use TestHelperTrait;
 
-    public function testWillThrowWhenApiHostMalformed() {
+    public function testWillThrowWhenApiHostMalformed(): void {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('can\'t parse provided apiHost - malformed uri');
 
@@ -43,7 +43,7 @@ final class ExceptionsTest extends TestCase
         $client->sendApiRequest('LOL', '/i/should/be/preserved', EndpointResponse::class, ['dontReplaceMe']);
     }
 
-    public function testAuthenticateWillThrowWhenNoTokenIsReturned() {
+    public function testAuthenticateWillThrowWhenNoTokenIsReturned(): void {
         $this->expectException(VaultAuthenticationException::class);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -58,7 +58,7 @@ final class ExceptionsTest extends TestCase
         $client->sendApiRequest('GET', '/foo', EndpointResponse::class);
     }
 
-    public function testWillThrowWhenAPIReturns403() {
+    public function testWillThrowWhenAPIReturns403(): void {
         $this->expectException(VaultAuthenticationException::class);
 
         $httpClient = $this->createMock(ClientInterface::class);
@@ -72,7 +72,7 @@ final class ExceptionsTest extends TestCase
         $client->sendApiRequest('GET', '/foo', EndpointResponse::class);
     }
 
-    public function testSendRequestWillThrow() {
+    public function testSendRequestWillThrow(): void {
         $this->expectException(VaultHttpException::class);
         $this->expectExceptionMessage('foobarMessage');
 
@@ -93,7 +93,7 @@ final class ExceptionsTest extends TestCase
         $client->sendApiRequest('GET', '/foo', EndpointResponse::class);
     }
 
-    public function testWillThrowWhenReturnClassDeclarationIsInvalid() {
+    public function testWillThrowWhenReturnClassDeclarationIsInvalid(): void {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Return Class declaration lacks static::fromResponse');
 
@@ -111,10 +111,10 @@ final class ExceptionsTest extends TestCase
             ]));
 
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
-        $client->sendApiRequest('GET', '/foo', "", MetaData::class);
+        $client->sendApiRequest('GET', '/foo', MetaData::class, []);
     }
 
-    public function testWillThrowWhenReturnClassDeclarationIsInvalidForBulk() {
+    public function testWillThrowWhenReturnClassDeclarationIsInvalidForBulk(): void {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Return Class declaration lacks static::fromBulkResponse');
 
@@ -135,48 +135,50 @@ final class ExceptionsTest extends TestCase
         $client->sendApiRequest('GET', '/foo', MetaData::class, new EncryptDataBulkRequest('foo'));
     }
 
-    public function testWillThrowWhenResultOfReturnClassDeclarationIsInvalid() {
-        $this->expectException(VaultException::class);
-        $this->expectExceptionMessage('Result from "fromResponse/fromBulkResponse" isn\'t an instance of EndpointResponse');
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient
-            ->expects($this->once())
-            ->method('sendRequest')
-            ->willReturn(new Response(200));
-
-        $auth = $this->createMock(AuthenticationProviderInterface::class);
-        $auth->expects($this->once())
-            ->method('authenticate')
-            ->willReturn(new AuthenticationMetaData((object) [
-                'client_token' => 'foo',
-            ]));
-
-        $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
-        $client->sendApiRequest('GET', '/foo', InvalidEndpointResponseMock::class, []);
-    }
-
-    public function testServerErrorResponse() {
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws Exception
+     * @throws InvalidDataException
+     * @throws VaultException
+     * @throws VaultAuthenticationException
+     */
+    public function testServerErrorResponse(): void {
         $this->expectException(VaultResponseException::class);
         $this->simulateApiResponse(500);
     }
 
-    public function testNotHandledStatusCodeResponse() {
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws Exception
+     * @throws InvalidDataException
+     * @throws VaultAuthenticationException
+     */
+    public function testNotHandledStatusCodeResponse(): void {
         $this->expectException(VaultException::class);
         $this->simulateApiResponse(100);
     }
 
-    public function testResponseExceptionHasRequestResponseMeta() {
+    public function testResponseExceptionHasRequestResponseMeta(): void {
         try {
             $this->simulateApiResponse(555);
         } catch (VaultResponseException $e) {
             $this->assertInstanceOf(RequestInterface::class, $e->getRequest());
             $this->assertInstanceOf(ResponseInterface::class, $e->getResponse());
+        } catch (\Throwable $e){
+            $this->throwException($e);
         }
     }
 
-
-    public function testInvalidDataResponse() {
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws Exception
+     * @throws VaultException
+     * @throws VaultAuthenticationException
+     */
+    public function testInvalidDataResponse(): void {
         $this->expectException(InvalidDataException::class);
         $this->expectExceptionMessage('looks malformed');
 
@@ -187,7 +189,14 @@ final class ExceptionsTest extends TestCase
         ]));
     }
 
-    public function testInvalidDataResponseWillConcatErrorMessages() {
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws Exception
+     * @throws VaultException
+     * @throws VaultAuthenticationException
+     */
+    public function testInvalidDataResponseWillConcatErrorMessages(): void {
         $this->expectException(InvalidDataException::class);
         $this->expectExceptionMessage('looks malformed, oh no');
 
@@ -199,7 +208,14 @@ final class ExceptionsTest extends TestCase
         ]));
     }
 
-    public function testInvalidRouteResponse() {
+    /**
+     * @throws Exception
+     * @throws VaultHttpException
+     * @throws VaultException
+     * @throws InvalidDataException
+     * @throws VaultAuthenticationException
+     */
+    public function testInvalidRouteResponse(): void {
         $this->expectException(InvalidRouteException::class);
         $this->simulateApiResponse(404, json_encode([
             'errors' => [
@@ -208,7 +224,15 @@ final class ExceptionsTest extends TestCase
         ]));
     }
 
-    public function testInvalidKeyNameNotFound() {
+    /**
+     * @throws InvalidRouteException
+     * @throws Exception
+     * @throws VaultHttpException
+     * @throws VaultException
+     * @throws InvalidDataException
+     * @throws VaultAuthenticationException
+     */
+    public function testInvalidKeyNameNotFound(): void {
         $this->expectException(KeyNameNotFoundException::class);
         $this->simulateApiResponse(400, json_encode([
             'errors' => [

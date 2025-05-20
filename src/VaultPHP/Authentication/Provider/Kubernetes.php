@@ -15,14 +15,14 @@ use VaultPHP\Response\EndpointResponse;
  * Class Kubernetes
  * @package VaultPHP\Authentication\Provider
  */
-class Kubernetes extends AbstractAuthenticationProvider
+final class Kubernetes extends AbstractAuthenticationProvider
 {
     /** @var string */
-    private $role;
+    private string $role;
     /** @var string */
-    private $jwt;
+    private string $jwt;
     /** @var string  */
-    private $endpoint;
+    private string $endpoint;
 
     /**
      * Kubernetes constructor.
@@ -30,7 +30,7 @@ class Kubernetes extends AbstractAuthenticationProvider
      * @param string $jwt
      * @param string $authPath - defaults to '/auth/kubernetes'
      */
-    public function __construct($role, $jwt, $authPath = 'auth/kubernetes')
+    public function __construct(string $role, string $jwt, string $authPath = 'auth/kubernetes')
     {
         $this->role = $role;
         $this->jwt = $jwt;
@@ -38,14 +38,16 @@ class Kubernetes extends AbstractAuthenticationProvider
     }
 
     /**
-     * @return bool|AuthenticationMetaData
+     * @return AuthenticationMetaData|false
+     *
      * @throws InvalidDataException
      * @throws InvalidRouteException
      * @throws VaultAuthenticationException
      * @throws VaultException
      * @throws VaultHttpException
      */
-    public function authenticate()
+    #[\Override]
+    public function authenticate(): false|AuthenticationMetaData
     {
         /** @var EndpointResponse $response */
         $response = $this->getVaultClient()->sendApiRequest(
