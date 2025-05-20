@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['7.x', '8.2']
+        php-versions: ['7.x', '8.3']
     name: Testing PHP ${{ matrix.php-versions }}
     steps:
       - name: Checkout
@@ -33,7 +33,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.3'
       - name: Check PHP Version
         run: php -v
       - name: Install Dependencies
