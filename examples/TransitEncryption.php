@@ -2,7 +2,6 @@
 
 namespace Examples;
 
-use Http\Client\Curl\Client;
 use VaultPHP\Authentication\Provider\Token;
 use VaultPHP\Exceptions\VaultException;
 use VaultPHP\Exceptions\VaultResponseException;
@@ -14,29 +13,26 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
 use VaultPHP\SecretEngines\Engines\Transit\EncryptionType;
 use VaultPHP\VaultClient;
 
+use GuzzleHttp\Client;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// setting up curl http client with SSL
-$httpClient = new Client(null, null, [
-    CURLOPT_SSLCERT => './ssl.pem',
-    CURLOPT_SSLCERTTYPE => 'PEM',
-    CURLOPT_SSLCERTPASSWD => 'fooBar',
-]);
+// setup http client
+$httpClient = new Client(['verify' => false]);
 
-// provide hashicorp vault auth
+// setup authentication provider
 $authenticationProvider = new Token('test');
 
-// initalize the vault request client
+// initialize the vault request client
 $vaultClient = new VaultClient(
     $httpClient,
     $authenticationProvider,
-    'https://127.0.0.1:8200'
+    'http://127.0.0.1:8200/transit/',
 );
 
-// choose your secret engine api
+// create eg. Transit API instance
 $transitApi = new Transit($vaultClient);
 
-// do fancy stuff
 try {
     // create key
     $exampleKey = new CreateKeyRequest('exampleKeyName');
@@ -45,19 +41,17 @@ try {
 
     // list keys
     $listKeyResponse = $transitApi->listKeys();
-    var_dump($listKeyResponse->getKeys());
+    var_dump($listKeyResponse->getKeys()); // ["exampleKeyName"]
 
     // encrypt data
     $encryptExample = new EncryptDataRequest('exampleKeyName', 'encryptMe');
     $encryptResponse = $transitApi->encryptData($encryptExample);
-
-    var_dump($encryptResponse->getCiphertext());
+    var_dump($encryptResponse->getCiphertext()); // vault:v1:jt9yxqU2aHd+EIOZs1swB+C3jVLtvyXgpfdfbxi+thNafm0IDQ==
 
     // decrypt data
     $decryptExample = new DecryptDataRequest('exampleKeyName', $encryptResponse->getCiphertext());
     $decryptResponse = $transitApi->decryptData($decryptExample);
-
-    var_dump($decryptResponse->getPlaintext());
+    var_dump($decryptResponse->getPlaintext());  // encryptMe
 
     // update key config and allow deletion
     $keyConfigExample = new UpdateKeyConfigRequest('exampleKeyName');
@@ -69,7 +63,7 @@ try {
 
     // list keys
     $listKeyResponse = $transitApi->listKeys();
-    var_dump($listKeyResponse->getKeys());
+    var_dump($listKeyResponse->getKeys()); // []
 
 } catch (VaultResponseException $exception) {
     var_dump($exception->getMessage());
