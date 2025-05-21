@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Test\VaultPHP\Response;
 
@@ -16,8 +17,8 @@ final class EndpointResponseTest extends TestCase
     public function testCanGetPopulateMetaDataFromResponse(): void
     {
         $testMeta = [
-            'request_id' => 1337,
-            'lease_id' => 1338,
+            'request_id' => "65e25ad7-de52-438e-b834-133713371337",
+            'lease_id' => "01c5ad5b-37de-47fa-8198-133813381338",
             'renewable' => true,
             'lease_duration' => 1339,
             'wrap_info' => 'foo',
