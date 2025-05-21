@@ -30,7 +30,7 @@ final class MetaDataResponseTest extends TestCase
             $name = $classProperty->getName();
             $nameMD5 = md5($name);
             $type = $classProperty->getType();
-            $typeName = $type->getName() ?? "";
+            $typeName = $type->getName() ?? '';
 
             $data[$name] = match ($typeName) {
                 'string' => $nameMD5,

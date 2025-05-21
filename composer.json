@@ -6,21 +6,21 @@
     "description": "A PHP client library for 'Vault by HashiCorp'",
     "require": {
         "ext-json": "*",
-        "guzzlehttp/psr7": "2.7.1",
+        "guzzlehttp/psr7": "^2.7.1",
         "php": ">=8.3",
-        "psr/http-client": "1.0.3"
+        "psr/http-client": "^1.0.3"
     },
     "suggest": {
         "php-http/curl-client": "CURL Client Adapter",
         "tuupola/http-factory": "HTTP Factory"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "v3.75.0",
-        "symfony/http-client": "v7.2.4",
-        "nyholm/psr7": "1.8.2",
-        "php-http/mock-client": "1.6.1",
-        "phpunit/phpunit": "12.1.5",
-        "vimeo/psalm": "6.10.3"
+        "friendsofphp/php-cs-fixer": "^v3.75.0",
+        "symfony/http-client": "^v7.2.4",
+        "nyholm/psr7": "^1.8.2",
+        "php-http/mock-client": "^1.6.1",
+        "phpunit/phpunit": "^12.1.5",
+        "vimeo/psalm": "^6.10.3"
     },
     "authors": [
         {

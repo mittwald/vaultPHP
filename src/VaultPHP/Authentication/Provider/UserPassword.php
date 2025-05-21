@@ -22,7 +22,7 @@ final class UserPassword extends AbstractAuthenticationProvider
     /** @var string */
     private string $password;
     /** @var string */
-    private string $endpoint = '/v1/auth/userpass/login/%s';
+    const string endpoint = '/v1/auth/userpass/login/%s';
 
     /**
      * UserPassword constructor.
@@ -70,6 +70,6 @@ final class UserPassword extends AbstractAuthenticationProvider
      */
     private function getAuthUrl(): string
     {
-        return sprintf($this->endpoint, urlencode($this->username));
+        return sprintf($this::endpoint, urlencode($this->username));
     }
 }

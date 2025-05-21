@@ -14,7 +14,7 @@ class EncryptData implements ArrayExportInterface
     use ArrayExportTrait;
 
     /** @var string */
-    protected string $plaintext = "";
+    protected string $plaintext = '';
 
     /** @var string|null */
     protected ?string $context = null;

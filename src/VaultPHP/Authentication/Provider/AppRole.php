@@ -24,7 +24,7 @@ final class AppRole extends AbstractAuthenticationProvider
     private string $secretId;
 
     /** @var string  */
-    private string $endpoint = '/v1/auth/approle/login';
+    const string endpoint = '/v1/auth/approle/login';
 
     /**
      * AppRole constructor.
@@ -52,7 +52,7 @@ final class AppRole extends AbstractAuthenticationProvider
         /** @var EndpointResponse $response */
         $response = $this->getVaultClient()->sendApiRequest(
             'POST',
-            $this->endpoint,
+            $this::endpoint,
             EndpointResponse::class,
             [
                 'role_id' => $this->roleId,

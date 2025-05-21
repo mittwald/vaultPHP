@@ -14,7 +14,7 @@ class DecryptData implements ArrayExportInterface
     use ArrayExportTrait;
 
     /** @var string */
-    protected string $ciphertext = "";
+    protected string $ciphertext = '';
 
     /** @var string|null */
     protected ?string $context = null;
