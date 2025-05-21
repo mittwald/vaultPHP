@@ -44,21 +44,22 @@ Below is a basic example of how to interact with Vault using this library:
 
 require 'vendor/autoload.php';
 
-use Mittwald\Vault\Client;
-use Mittwald\Vault\Authentication\Token;
-use Http\Client\Curl\Client;
+use VaultPHP\VaultClient;
+use VaultPHP\Authentication\Provider\Token;
 
-// setting up independent http client 
-$httpClient = new Client();
+use GuzzleHttp\Client;
+
+// setting up independent http client - example with guzzle http client
+$httpClient = new Client(['verify' => false]);
 
 // setting up desired vault strategy
-$auth = new Token('dummyToken');
+$authProvider = new Token('dummyToken');
 
 // Initialize Vault client
-$client = new Client(
+$client = new VaultClient(
     $httpClient,
-    $auth,
-    'https://vault.example.com:1337'
+    $authProvider,
+    'https://vault.example.com:1337/transit/'
 );
 
 // List all keys from Transit Secret engine
@@ -92,7 +93,7 @@ For more advanced use (custom HTTP clients, other auth methods, etc.), see the [
 You can inject any [PSR-18 HTTP Client](https://www.php-fig.org/psr/psr-18/) for maximum flexibility:
 
 ```php
-$client = new Client(
+$client = new VaultClient(
     $yourPsr18Client,
     $auth,
     'https://vault.example.com:1337'
