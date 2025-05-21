@@ -62,7 +62,7 @@ class EndpointResponse implements EndpointResponseInterface
      * @param ResponseInterface $response
      * @return BulkEndpointResponse
      */
-    static function fromBulkResponse(ResponseInterface $response): BulkEndpointResponse
+    public static function fromBulkResponse(ResponseInterface $response): BulkEndpointResponse
     {
         $metaData = static::getResponseContent($response);
 
@@ -71,7 +71,7 @@ class EndpointResponse implements EndpointResponseInterface
         unset($metaData['data']);
 
         $responseDTO = new BulkEndpointResponse($domainData, $metaData);
-        $responseDTO->batch_results = array_map(function($batchResult) {
+        $responseDTO->batch_results = array_map(function ($batchResult) {
             /** @var object $batchResult */
 
             $errors = isset($batchResult->error) && $batchResult->error ? explode(', ', (string) $batchResult->error) : [];

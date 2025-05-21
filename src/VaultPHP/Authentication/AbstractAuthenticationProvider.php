@@ -34,7 +34,7 @@ abstract class AbstractAuthenticationProvider implements AuthenticationProviderI
         if (!$this->vaultClient) {
             throw new VaultException('Trying to request the VaultClient before initialization');
         }
-        
+
         return $this->vaultClient;
     }
 }

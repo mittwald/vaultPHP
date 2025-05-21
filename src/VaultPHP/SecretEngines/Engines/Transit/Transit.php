@@ -148,7 +148,7 @@ final class Transit extends AbstractSecretEngine
         /** @var ListKeysResponse */
         return $this->vaultClient->sendApiRequest(
             'LIST',
-            sprintf('/v1/%s/keys', $this->APIPath,),
+            sprintf('/v1/%s/keys', $this->APIPath, ),
             ListKeysResponse::class,
             []
         );

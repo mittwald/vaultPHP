@@ -34,7 +34,7 @@ final class AppRole extends AbstractAuthenticationProvider
     public function __construct(string $roleId, string $secretId)
     {
         $this->roleId = $roleId;
-        $this->secretId= $secretId;
+        $this->secretId = $secretId;
     }
 
     /**

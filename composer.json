@@ -15,6 +15,7 @@
         "tuupola/http-factory": "HTTP Factory"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "v3.75.0",
         "symfony/http-client": "v7.2.4",
         "nyholm/psr7": "1.8.2",
         "php-http/mock-client": "1.6.1",
@@ -38,7 +39,8 @@
         }
     },
     "scripts": {
-        "test": "php ./vendor/bin/phpunit --configuration ./phpunit.xml.dist"
+        "test": "php ./vendor/bin/phpunit --configuration ./phpunit.xml.dist",
+        "pretty": "php ./vendor/bin/php-cs-fixer fix ./src"
     },
     "config": {
         "allow-plugins": {

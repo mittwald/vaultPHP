@@ -42,8 +42,8 @@ trait ArrayExportTrait
     {
         $data = get_object_vars($this);
         $result = $this->array_map_r(
-        /** @psalm-suppress MissingClosureParamType */
-        function ($v) {
+            /** @psalm-suppress MissingClosureParamType */
+            function ($v) {
                 if ($v instanceof ArrayExportInterface) {
                     return $v->toArray();
                 }

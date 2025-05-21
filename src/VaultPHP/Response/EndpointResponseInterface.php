@@ -14,7 +14,7 @@ interface EndpointResponseInterface
      * @param ResponseInterface $response
      * @return static
      */
-    static function fromResponse(ResponseInterface $response): static;
+    public static function fromResponse(ResponseInterface $response): static;
 
 
     /**

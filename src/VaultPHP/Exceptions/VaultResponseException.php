@@ -36,11 +36,13 @@ class VaultResponseException extends VaultException
         parent::__construct($errors, $response->getStatusCode(), $prevException);
     }
 
-    public function getRequest(): RequestInterface {
+    public function getRequest(): RequestInterface
+    {
         return $this->request;
     }
 
-    public function getResponse(): ResponseInterface {
+    public function getResponse(): ResponseInterface
+    {
         return $this->response;
     }
 }

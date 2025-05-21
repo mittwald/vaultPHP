@@ -86,7 +86,7 @@ final class VaultClient
         }
 
         $encodedData = json_encode($data);
-        if($encodedData === false) {
+        if ($encodedData === false) {
             return "";
         }
 
@@ -112,8 +112,7 @@ final class VaultClient
         string $returnClass,
         ResourceRequestInterface|array $data = [],
         bool $authRequired = true
-    ): mixed
-    {
+    ): mixed {
         if ($authRequired) {
             $this->authenticate();
         }
@@ -152,8 +151,7 @@ final class VaultClient
         ResponseInterface $response,
         string            $returnClass,
         bool $isBulkRequest
-    ): mixed
-    {
+    ): mixed {
         $status = $response->getStatusCode();
 
         /**
