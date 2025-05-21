@@ -1,7 +1,7 @@
 version: "3"
 services:
   vault:
-    image: vault:latest
+    image: hashicorp/vault:latest
     container_name: vault
     restart: unless-stopped
     ports:
@@ -12,6 +12,4 @@ services:
       VAULT_TOKEN: 'test'
     cap_add:
       - IPC_LOCK
-    healthcheck:
-      retries: 5
     command: server -dev
