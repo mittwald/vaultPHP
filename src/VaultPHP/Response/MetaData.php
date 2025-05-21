@@ -87,6 +87,15 @@ final class MetaData implements MetaDataInterface
         $this->lease_duration = (int) $lease_duration;
     }
 
+    /**
+     * @param array|null $warnings
+     * @return void
+     */
+    public function setWarnings(array|null $warnings): void
+    {
+        $this->warnings = $warnings ?? [];
+    }
+
 
     /**
      * @return string|null
