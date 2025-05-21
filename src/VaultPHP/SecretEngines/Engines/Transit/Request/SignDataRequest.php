@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace VaultPHP\SecretEngines\Engines\Transit\Request;
@@ -8,27 +7,27 @@ use VaultPHP\SecretEngines\Interfaces\ResourceRequestInterface;
 
 final class SignDataRequest implements ResourceRequestInterface
 {
-    public const HASH_ALGORITHM_SHA1 = 'sha1';
+    public const string HASH_ALGORITHM_SHA1 = 'sha1';
 
-    public const HASH_ALGORITHM_SHA2_224 = 'sha2-224';
+    public const string HASH_ALGORITHM_SHA2_224 = 'sha2-224';
 
-    public const HASH_ALGORITHM_SHA2_256 = 'sha2-265';
+    public const string HASH_ALGORITHM_SHA2_256 = 'sha2-265';
 
-    public const HASH_ALGORITHM_SHA2_384 = 'sha2-384';
+    public const string HASH_ALGORITHM_SHA2_384 = 'sha2-384';
 
-    public const HASH_ALGORITHM_SHA2_512 = 'sha2-512';
+    public const string HASH_ALGORITHM_SHA2_512 = 'sha2-512';
 
-    public const HASH_ALGORITHM_SHA3_224 = 'sha3-224';
+    public const string HASH_ALGORITHM_SHA3_224 = 'sha3-224';
 
-    public const HASH_ALGORITHM_SHA3_256 = 'sha3-265';
+    public const string HASH_ALGORITHM_SHA3_256 = 'sha3-265';
 
-    public const HASH_ALGORITHM_SHA3_384 = 'sha3-384';
+    public const string HASH_ALGORITHM_SHA3_384 = 'sha3-384';
 
-    public const HASH_ALGORITHM_SHA3_512 = 'sha3-512';
+    public const string HASH_ALGORITHM_SHA3_512 = 'sha3-512';
 
-    public const SIGNATURE_ALGORITHM_PSS = 'pss';
+    public const string SIGNATURE_ALGORITHM_PSS = 'pss';
 
-    public const SIGNATURE_ALGORITHM_PKCS1V15 = 'pkcs1v15';
+    public const string SIGNATURE_ALGORITHM_PKCS1V15 = 'pkcs1v15';
 
     /** @var string */
     protected string $key;

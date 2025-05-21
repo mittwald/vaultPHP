@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace VaultPHP\Authentication\Provider;
 
@@ -24,7 +25,7 @@ final class AppRole extends AbstractAuthenticationProvider
     private string $secretId;
 
     /** @var string  */
-    public const string endpoint = '/v1/auth/approle/login';
+    const string endpoint = '/v1/auth/approle/login';
 
     /**
      * AppRole constructor.
