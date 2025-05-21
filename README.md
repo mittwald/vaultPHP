@@ -46,6 +46,7 @@ require 'vendor/autoload.php';
 
 use VaultPHP\VaultClient;
 use VaultPHP\Authentication\Provider\Token;
+use VaultPHP\SecretEngines\Engines\Transit\Transit;
 
 use GuzzleHttp\Client;
 
