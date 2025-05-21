@@ -3,11 +3,12 @@
 namespace Test\VaultPHP\Authentication\Provider;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
+use Test\VaultPHP\TestHelperTrait;
 use VaultPHP\Authentication\Provider\Kubernetes;
 use VaultPHP\Authentication\AuthenticationMetaData;
 use VaultPHP\Exceptions\VaultException;
-use VaultPHP\Response\EndpointResponse;
 use VaultPHP\VaultClient;
 
 /**
@@ -16,51 +17,44 @@ use VaultPHP\VaultClient;
  */
 final class KubernetesTest extends TestCase
 {
-    public function testGetToken()
+    use TestHelperTrait;
+
+    public function testGetToken(): void
     {
-        $apiResponse = new Response(200, [], json_encode([
+        $kubernetesAuth = new Kubernetes('foo', 'bar');
+
+        $httpClient = new Client();
+        $httpClient->addResponse(new Response(200, [], json_encode([
             'auth' => [
                 'client_token' => 'fooToken',
             ],
-        ]));
-        $returnResponseClass = EndpointResponse::fromResponse($apiResponse);
-
-        $clientMock = $this->createMock(VaultClient::class);
-        $clientMock
-            ->expects($this->once())
-            ->method('sendApiRequest')
-            ->with('POST', '/v1/auth/kubernetes/login', EndpointResponse::class, ['role' => 'foo', 'jwt' => 'bar'], false)
-            ->willReturn($returnResponseClass);
-
-        $kubernetesAuth = new Kubernetes('foo', 'bar');
-        $kubernetesAuth->setVaultClient($clientMock);
+        ])));
+        new VaultClient($httpClient, $kubernetesAuth, "https://mocked:1337");
 
         $tokenMeta = $kubernetesAuth->authenticate();
 
         $this->assertInstanceOf(AuthenticationMetaData::class, $tokenMeta);
         $this->assertEquals('fooToken', $tokenMeta->getClientToken());
+
+        $request = $httpClient->getLastRequest();
+
+        $this->assertEquals("POST", $request->getMethod());
+        $this->assertEquals("/v1/auth/kubernetes/login", $request->getUri()->getPath());
+        $this->assertEquals('{"role":"foo","jwt":"bar"}',  $request->getBody()->getContents());
     }
 
-    public function testWillReturnNothingWhenTokenReceiveFails()
+    public function testWillReturnNothingWhenTokenReceiveFails(): void
     {
-        $apiResponse = new Response(200, [], json_encode([]));
-        $returnResponseClass = EndpointResponse::fromResponse($apiResponse);
+        $kubernetesAuth = new Kubernetes('foo', 'bar');
+        $this->mockedVaultClient(
+            new Response(200, [], json_encode([])),
+            $kubernetesAuth
+        );
 
-        $clientMock = $this->createMock(VaultClient::class);
-        $clientMock
-            ->expects($this->once())
-            ->method('sendApiRequest')
-            ->willReturn($returnResponseClass);
-
-        $userPasswordAuth = new Kubernetes('foo', 'bar');
-        $userPasswordAuth->setVaultClient($clientMock);
-
-        $tokenMeta = $userPasswordAuth->authenticate();
-
-        $this->assertFalse( $tokenMeta);
+        $this->assertFalse($kubernetesAuth->authenticate());
     }
 
-    public function testWillThrowWhenTryingToGetRequestClientBeforeInit()
+    public function testWillThrowWhenTryingToGetRequestClientBeforeInit(): void
     {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Trying to request the VaultClient before initialization');

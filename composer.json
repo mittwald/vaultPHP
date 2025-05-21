@@ -15,6 +15,9 @@
         "tuupola/http-factory": "HTTP Factory"
     },
     "require-dev": {
+        "symfony/http-client": "v7.2.4",
+        "nyholm/psr7": "1.8.2",
+        "php-http/mock-client": "1.6.1",
         "phpunit/phpunit": "12.1.5",
         "vimeo/psalm": "6.10.3"
     },
@@ -36,5 +39,10 @@
     },
     "scripts": {
         "test": "php ./vendor/bin/phpunit --configuration ./phpunit.xml.dist"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
     }
 }

@@ -3,12 +3,16 @@
 namespace Test\VaultPHP;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Mock\Client;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
-use Test\VaultPHP\Mocks\EndpointResponseMock;
-use VaultPHP\Authentication\AuthenticationProviderInterface;
 use VaultPHP\Authentication\Provider\Token;
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultAuthenticationException;
+use VaultPHP\Exceptions\VaultException;
+use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\VaultClient;
 
@@ -20,7 +24,12 @@ final class VaultClientTest extends TestCase
 {
     use TestHelperTrait;
 
-    public function testAuthProviderGetsClientInjected()
+
+    /**
+     * @throws VaultException
+     * @throws Exception
+     */
+    public function testAuthProviderGetsClientInjected(): void
     {
         $auth = new Token('foo');
         $httpClient = $this->createMock(ClientInterface::class);
@@ -29,60 +38,58 @@ final class VaultClientTest extends TestCase
         $this->assertSame($client, $auth->getVaultClient());
     }
 
-    public function testRequestWillExtendedWithDefaultVars() {
+    /**
+     * @return void
+     * @throws InvalidDataException
+     * @throws InvalidRouteException
+     * @throws VaultAuthenticationException
+     * @throws VaultException
+     * @throws VaultHttpException
+     */
+    public function testRequestWillExtendedWithDefaultVars(): void {
         $auth = new Token('fooToken');
 
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient
-            ->expects($this->once())
-            ->method('sendRequest')
-            ->with($this->callback(function(RequestInterface $requestWithDefaults) {
-                // test if values from last request are preserved
-                $this->assertEquals('LOL', $requestWithDefaults->getMethod());
-                $this->assertEquals('/i/should/be/preserved', $requestWithDefaults->getUri()->getPath());
-                $this->assertEquals(json_encode(['dontReplaceMe']), $requestWithDefaults->getBody()->getContents());
-
-                // test default values that should be added
-                $this->assertEquals('http', $requestWithDefaults->getUri()->getScheme());
-                $this->assertEquals('foo.bar', $requestWithDefaults->getUri()->getHost());
-                $this->assertEquals(1337, $requestWithDefaults->getUri()->getPort());
-
-                $this->assertSame('1', $requestWithDefaults->getHeader('X-Vault-Request')[0]);
-                $this->assertSame('fooToken', $requestWithDefaults->getHeader('X-Vault-Token')[0]);
-
-                return true;
-            }))
-            ->willReturn(new Response());
+        $httpClient = new Client();
+        $response = new Response(200, []);
+        $httpClient->addResponse($response);
 
         $client = new VaultClient($httpClient, $auth, "http://foo.bar:1337");
         $client->sendApiRequest('LOL', '/i/should/be/preserved', EndpointResponse::class, ['dontReplaceMe']);
+
+        $usedRequest = $httpClient->getLastRequest();
+        $this->assertEquals('LOL', $usedRequest->getMethod());
+        $this->assertEquals('/i/should/be/preserved', $usedRequest->getUri()->getPath());
+        $this->assertEquals(json_encode(['dontReplaceMe']), $usedRequest->getBody()->getContents());
+
+        // test default values that should be added
+        $this->assertEquals('http', $usedRequest->getUri()->getScheme());
+        $this->assertEquals('foo.bar', $usedRequest->getUri()->getHost());
+        $this->assertEquals(1337, $usedRequest->getUri()->getPort());
+
+        $this->assertSame('1', $usedRequest->getHeader('X-Vault-Request')[0]);
+        $this->assertSame('fooToken', $usedRequest->getHeader('X-Vault-Token')[0]);
     }
 
-    public function testSendRequest() {
-        $response = new Response();
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient
-            ->expects($this->once())
-            ->method('sendRequest')
-            ->with($this->callback(function ($request) {
-                $this->assertInstanceOf(RequestInterface::class, $request);
-                return true;
-            }))
-            ->willReturn($response);
-
-        $auth = $this->createMock(AuthenticationProviderInterface::class);
-
-        $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
-        $client->sendApiRequest('GET', '/foo',  EndpointResponse::class, [], false);
-    }
-
-    public function testSuccessApiResponse() {
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws InvalidDataException
+     * @throws VaultException
+     * @throws VaultAuthenticationException
+     */
+    public function testSuccessApiResponse(): void {
         $response = $this->simulateApiResponse(200, '');
         $this->assertInstanceOf(EndpointResponse::class, $response);
     }
 
-    public function testEmptyResponse() {
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws VaultException
+     * @throws InvalidDataException
+     * @throws VaultAuthenticationException
+     */
+    public function testEmptyResponse(): void {
         $response = $this->simulateApiResponse(404);
         $this->assertInstanceOf(EndpointResponse::class, $response);
     }

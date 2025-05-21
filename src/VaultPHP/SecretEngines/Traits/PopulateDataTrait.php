@@ -12,9 +12,9 @@ trait PopulateDataTrait
     {
         /** @var string $key */
         foreach ($data as $key => $value) {
-            if(method_exists(self::class, "set{$this->toCamelCase($key)}")) {
-                call_user_func([self::class, "set{$this->toCamelCase($key)}"], $value);
-            } else if (property_exists(self::class, $key)) {
+            if(method_exists(static::class, "set{$this->toCamelCase($key)}")) {
+                call_user_func([static::class, "set{$this->toCamelCase($key)}"], $value);
+            } else if (property_exists(static::class, $key)) {
                 $this->$key = $value;
             }
         }

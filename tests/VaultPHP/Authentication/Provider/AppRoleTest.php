@@ -3,11 +3,16 @@
 namespace Test\VaultPHP\Authentication\Provider;
 
 use GuzzleHttp\Psr7\Response;
+use Http\Mock\Client;
 use PHPUnit\Framework\TestCase;
+use Test\VaultPHP\TestHelperTrait;
 use VaultPHP\Authentication\Provider\AppRole;
 use VaultPHP\Authentication\AuthenticationMetaData;
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultAuthenticationException;
 use VaultPHP\Exceptions\VaultException;
-use VaultPHP\Response\EndpointResponse;
+use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\VaultClient;
 
 /**
@@ -16,51 +21,51 @@ use VaultPHP\VaultClient;
  */
 final class AppRoleTest extends TestCase
 {
-    public function testGetToken()
+    use TestHelperTrait;
+
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws InvalidDataException
+     * @throws VaultException
+     * @throws VaultAuthenticationException
+     */
+    public function testGetToken(): void
     {
-        $apiResponse = new Response(200, [], json_encode([
+        $AppRoleAuth = new AppRole('foo', 'bar');
+
+        $httpClient = new Client();
+        $httpClient->addResponse(new Response(200, [], json_encode([
             'auth' => [
                 'client_token' => 'fooToken',
             ],
-        ]));
-        $returnResponseClass = EndpointResponse::fromResponse($apiResponse);
-
-        $clientMock = $this->createMock(VaultClient::class);
-        $clientMock
-            ->expects($this->once())
-            ->method('sendApiRequest')
-            ->with('POST', '/v1/auth/approle/login', EndpointResponse::class, ['role_id' => 'foo', 'secret_id' => 'bar'], false)
-            ->willReturn($returnResponseClass);
-
-        $AppRoleAuth = new AppRole('foo', 'bar');
-        $AppRoleAuth->setVaultClient($clientMock);
+        ])));
+        new VaultClient($httpClient, $AppRoleAuth, "https://mocked:1337");
 
         $tokenMeta = $AppRoleAuth->authenticate();
 
         $this->assertInstanceOf(AuthenticationMetaData::class, $tokenMeta);
         $this->assertEquals('fooToken', $tokenMeta->getClientToken());
+
+        $request = $httpClient->getLastRequest();
+
+        $this->assertEquals("POST", $request->getMethod());
+        $this->assertEquals("/v1/auth/approle/login", $request->getUri()->getPath());
+        $this->assertEquals('{"role_id":"foo","secret_id":"bar"}',  $request->getBody()->getContents());
     }
 
-    public function testWillReturnNothingWhenTokenReceiveFails()
+    public function testWillReturnNothingWhenTokenReceiveFails(): void
     {
-        $apiResponse = new Response(200, [], json_encode([]));
-        $returnResponseClass = EndpointResponse::fromResponse($apiResponse);
-
-        $clientMock = $this->createMock(VaultClient::class);
-        $clientMock
-            ->expects($this->once())
-            ->method('sendApiRequest')
-            ->willReturn($returnResponseClass);
-
         $userPasswordAuth = new AppRole('foo', 'bar');
-        $userPasswordAuth->setVaultClient($clientMock);
+        $this->mockedVaultClient(
+            new Response(200, [], json_encode([])),
+            $userPasswordAuth
+        );
 
-        $tokenMeta = $userPasswordAuth->authenticate();
-
-        $this->assertFalse( $tokenMeta);
+        $this->assertFalse($userPasswordAuth->authenticate());
     }
 
-    public function testWillThrowWhenTryingToGetRequestClientBeforeInit()
+    public function testWillThrowWhenTryingToGetRequestClientBeforeInit(): void
     {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Trying to request the VaultClient before initialization');

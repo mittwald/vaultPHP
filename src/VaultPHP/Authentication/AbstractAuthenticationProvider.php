@@ -12,7 +12,7 @@ use VaultPHP\VaultClient;
 abstract class AbstractAuthenticationProvider implements AuthenticationProviderInterface
 {
     /** @var VaultClient|null */
-    private ?VaultClient $vaultClient;
+    private ?VaultClient $vaultClient = null;
 
     /**
      * @param VaultClient $VaultClient

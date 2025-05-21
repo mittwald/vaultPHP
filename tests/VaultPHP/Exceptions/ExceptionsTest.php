@@ -66,7 +66,7 @@ final class ExceptionsTest extends TestCase
         $auth
             ->expects($this->once())
             ->method('authenticate')
-            ->willReturn(null);
+            ->willReturn(false);
 
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
         $client->sendApiRequest('GET', '/foo', EndpointResponse::class);

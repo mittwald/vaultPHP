@@ -15,6 +15,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Response\DecryptDataResponse;
  */
 final class BulkEndpointResponseTest extends TestCase
 {
+
     public function testCanInteractWithBulkResponseLikeArray(): void
     {
         $response = new Response(200, [], json_encode([

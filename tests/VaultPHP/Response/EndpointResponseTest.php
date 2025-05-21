@@ -4,7 +4,6 @@ namespace Test\VaultPHP\Response;
 
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use VaultPHP\Response\MetaData;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\DecryptDataResponse;
 
@@ -14,7 +13,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Response\DecryptDataResponse;
  */
 final class EndpointResponseTest extends TestCase
 {
-    public function testCanGetPopulateMetaDataFromResponse()
+    public function testCanGetPopulateMetaDataFromResponse(): void
     {
         $testMeta = [
             'request_id' => 1337,
@@ -38,9 +37,6 @@ final class EndpointResponseTest extends TestCase
         $endpointResponse = EndpointResponse::fromResponse($response);
         $basicMeta = $endpointResponse->getMetaData();
 
-        $this->assertInstanceOf(EndpointResponse::class, $endpointResponse);
-        $this->assertInstanceOf(MetaData::class, $basicMeta);
-
         $this->assertEquals($testMeta['request_id'], $basicMeta->getRequestId());
         $this->assertEquals($testMeta['lease_id'], $basicMeta->getLeaseId());
         $this->assertEquals($testMeta['renewable'], $basicMeta->getRenewable());
@@ -51,7 +47,7 @@ final class EndpointResponseTest extends TestCase
         $this->assertEquals($testMeta['errors'], $basicMeta->getErrors());
     }
 
-    public function testCanGetPopulatePayloadDataFromResponse()
+    public function testCanGetPopulatePayloadDataFromResponse(): void
     {
         $response = new Response(200, [], json_encode([
             'data' => [
@@ -64,7 +60,7 @@ final class EndpointResponseTest extends TestCase
         $this->assertEquals('fooPlaintext', $endpointResponse->getPlaintext());
     }
 
-    public function testHasErrors()
+    public function testHasErrors(): void
     {
         $response = new Response(200, [], json_encode([
             'errors' => [],
@@ -84,7 +80,7 @@ final class EndpointResponseTest extends TestCase
         $this->assertTrue($endpointResponse->hasErrors());
     }
 
-    public function testGetErrors()
+    public function testGetErrors(): void
     {
         $response = new Response(200, [], json_encode([
             'errors' => [
