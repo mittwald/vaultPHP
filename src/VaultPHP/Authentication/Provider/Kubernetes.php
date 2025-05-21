@@ -50,15 +50,14 @@ final class Kubernetes extends AbstractAuthenticationProvider
     public function authenticate(): false|AuthenticationMetaData
     {
         /** @var EndpointResponse $response */
-        $response = $this->getVaultClient()->sendApiRequest(
+        $response = $this->sendApiRequest(
             'POST',
             $this->endpoint,
             EndpointResponse::class,
             [
                 'role' => $this->role,
                 'jwt' => $this->jwt,
-            ],
-            false
+            ]
         );
 
         if ($auth = $response->getMetaData()->getAuth()) {

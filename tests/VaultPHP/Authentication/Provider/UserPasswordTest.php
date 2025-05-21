@@ -9,7 +9,11 @@ use Test\VaultPHP\TestHelperTrait;
 use VaultPHP\Authentication\Provider\Kubernetes;
 use VaultPHP\Authentication\Provider\UserPassword;
 use VaultPHP\Authentication\AuthenticationMetaData;
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultAuthenticationException;
 use VaultPHP\Exceptions\VaultException;
+use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\VaultClient;
 
@@ -57,12 +61,18 @@ final class UserPasswordTest extends TestCase
         $this->assertFalse($tokenMeta);
     }
 
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws InvalidDataException
+     * @throws VaultAuthenticationException
+     */
     public function testWillThrowWhenTryingToGetRequestClientBeforeInit(): void
     {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Trying to request the VaultClient before initialization');
 
         $auth = new UserPassword('foo', 'bar');
-        $auth->getVaultClient();
+        $auth->authenticate();
     }
 }

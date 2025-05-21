@@ -7,6 +7,7 @@ use Http\Mock\Client;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
+use VaultPHP\Authentication\AbstractAuthenticationProvider;
 use VaultPHP\Authentication\Provider\Token;
 use VaultPHP\Exceptions\InvalidDataException;
 use VaultPHP\Exceptions\InvalidRouteException;
@@ -31,11 +32,14 @@ final class VaultClientTest extends TestCase
      */
     public function testAuthProviderGetsClientInjected(): void
     {
-        $auth = new Token('foo');
+        $auth = $this->createMock(AbstractAuthenticationProvider::class);
+        $auth->expects($this->once())
+            ->method('setVaultClient')
+            ->with($this->isInstanceOf(VaultClient::class));
+        ;
         $httpClient = $this->createMock(ClientInterface::class);
-        $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
 
-        $this->assertSame($client, $auth->getVaultClient());
+        new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
     }
 
     /**

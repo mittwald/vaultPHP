@@ -22,7 +22,7 @@ final class UserPassword extends AbstractAuthenticationProvider
     /** @var string */
     private string $password;
     /** @var string */
-    const string endpoint = '/v1/auth/userpass/login/%s';
+    public const string endpoint = '/v1/auth/userpass/login/%s';
 
     /**
      * UserPassword constructor.
@@ -48,14 +48,13 @@ final class UserPassword extends AbstractAuthenticationProvider
     public function authenticate(): AuthenticationMetaData|bool
     {
         /** @var EndpointResponse $response */
-        $response = $this->getVaultClient()->sendApiRequest(
+        $response = $this->sendApiRequest(
             'POST',
             $this->getAuthUrl(),
             EndpointResponse::class,
             [
                 'password' => $this->password
-            ],
-            false
+            ]
         );
 
         if ($auth = $response->getMetaData()->getAuth()) {

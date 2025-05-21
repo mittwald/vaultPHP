@@ -8,7 +8,11 @@ use PHPUnit\Framework\TestCase;
 use Test\VaultPHP\TestHelperTrait;
 use VaultPHP\Authentication\Provider\Kubernetes;
 use VaultPHP\Authentication\AuthenticationMetaData;
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultAuthenticationException;
 use VaultPHP\Exceptions\VaultException;
+use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\VaultClient;
 
 /**
@@ -54,12 +58,18 @@ final class KubernetesTest extends TestCase
         $this->assertFalse($kubernetesAuth->authenticate());
     }
 
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws InvalidDataException
+     * @throws VaultAuthenticationException
+     */
     public function testWillThrowWhenTryingToGetRequestClientBeforeInit(): void
     {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Trying to request the VaultClient before initialization');
 
         $auth = new Kubernetes('foo', 'bar');
-        $auth->getVaultClient();
+        $auth->authenticate();
     }
 }

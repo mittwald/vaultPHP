@@ -2,7 +2,12 @@
 
 namespace VaultPHP\Authentication;
 
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultAuthenticationException;
 use VaultPHP\Exceptions\VaultException;
+use VaultPHP\Exceptions\VaultHttpException;
+use VaultPHP\SecretEngines\Interfaces\ResourceRequestInterface;
 use VaultPHP\VaultClient;
 
 /**
@@ -28,13 +33,30 @@ abstract class AbstractAuthenticationProvider implements AuthenticationProviderI
      * @throws VaultException
      * @return VaultClient
      */
-    #[\Override]
-    public function getVaultClient(): VaultClient
+    private function getVaultClient(): VaultClient
     {
         if (!$this->vaultClient) {
             throw new VaultException('Trying to request the VaultClient before initialization');
         }
 
         return $this->vaultClient;
+    }
+
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws VaultException
+     * @throws InvalidDataException
+     * @throws VaultAuthenticationException
+     */
+    protected function sendApiRequest(string $method, string $endpoint, string $returnClass, ResourceRequestInterface|array $data = []): mixed
+    {
+        return $this->getVaultClient()->sendApiRequest(
+            $method,
+            $endpoint,
+            $returnClass,
+            $data,
+            false,
+        );
     }
 }

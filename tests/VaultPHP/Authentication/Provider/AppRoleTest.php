@@ -65,12 +65,18 @@ final class AppRoleTest extends TestCase
         $this->assertFalse($userPasswordAuth->authenticate());
     }
 
+    /**
+     * @throws InvalidRouteException
+     * @throws VaultHttpException
+     * @throws InvalidDataException
+     * @throws VaultAuthenticationException
+     */
     public function testWillThrowWhenTryingToGetRequestClientBeforeInit(): void
     {
         $this->expectException(VaultException::class);
         $this->expectExceptionMessage('Trying to request the VaultClient before initialization');
 
         $auth = new AppRole('foo', 'bar');
-        $auth->getVaultClient();
+        $auth->authenticate();
     }
 }
