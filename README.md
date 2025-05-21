@@ -1,120 +1,132 @@
-# PHP Hashicorp Vault Client
+# VaultPHP
 
-![Tests](https://github.com/mittwald/vaultPHP/workflows/CI%20Tests/badge.svg)
+[![Latest Release](https://img.shields.io/github/release/mittwald/vaultPHP.svg)](https://github.com/mittwald/vaultPHP/releases)
+[![CI](https://github.com/mittwald/vaultPHP/workflows/CI%20Tests/badge.svg)](https://github.com/mittwald/vaultPHP/actions)
+[![License: MIT](https://img.shields.io/github/license/mittwald/vaultPHP.svg)](LICENSE)
 
-PHP Client Library for the Hashicorp Vault Service. 
-This Client follows the Request and Response Data equal to the Hashicorp Vault Client Documentation.
-- Authentication https://www.vaultproject.io/api-docs/auth
-- Secret Engines https://www.vaultproject.io/api-docs/secret
+A modern PHP client for [HashiCorp Vault](https://www.vaultproject.io/) — unlock secure secrets management in your PHP applications.
 
-Feel free to open Pull Requests to add improvements or missing functionality.
+---
+
+## Features
+
+- **API Client for HashiCorp Vault**  
+  Simple and intuitive interface for Vault HTTP API.
+- **Bulk Operations**  
+  Perform read/write operations on multiple secrets in a single workflow for efficiency.
+- **Authentication Support**  
+  Compatible with popular Vault auth backends (Token, AppRole, User/Password, etc.).
+- **Secret Engines**  
+  Easy interaction with common secret engines (Transit, etc.).
+- **Typed Responses**  
+  Strong-typed, doctrine-based responses for safer PHP development.
+- **Extendable & PSR-compliant**  
+  Easily extend class behaviors and integrate with PSR-18 HTTP clients.
+
+---
 
 ## Installation
 
-### Composer
-`composer require mittwald/vault-php`
+Install via [Composer](https://getcomposer.org/):
 
-## Implemented Functionality:
-- Auth
-  - User/Password
-  - Token
-  - Kubernetes
-  - AppRole
-- Secret Engines
-  - Transit Engine
-    - Encrypt/Decrypt
-    - Update Key Config
-    - Create Key
-    - Delete Key
-    - List Keys
-    - Sign Data
+```bash
+composer require mittwald/vault-php
+```
 
-## Basic Usage
+---
+
+## Usage
+
+Below is a basic example of how to interact with Vault using this library:
 
 ```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Mittwald\Vault\Client;
+use Mittwald\Vault\Authentication\Token;
+use Http\Client\Curl\Client;
+
 // setting up independent http client 
 $httpClient = new Client();
 
-// setting up vault auth provider
-$auth = new Token('foo');
+// setting up desired vault strategy
+$auth = new Token('dummyToken');
 
-// creating the vault request client
-$client = new VaultClient(
+// Initialize Vault client
+$client = new Client(
     $httpClient,
     $auth,
-    'http://127.0.0.1:8200'
+    'https://vault.example.com:1337'
 );
 
-// selecting the desired secret engine
-// e.g. Transit Secret Engine
+// List all keys from Transit Secret engine
 $api = new Transit($client);
-
-// calling specific endpoint
-$response = $api->listKeys();
-
-//reading results
-var_dump($response->getKeys());
-//...
-//...
-//Profit...
+var_dump($api->listKeys());
 ```
 
-#### VaultClient
+For more advanced use (custom HTTP clients, other auth methods, etc.), see the [`examples/`](examples/) directory.
 
-````php
-public function __construct(
-    HttpClient $httpClient,
-    AuthenticationProviderInterface $authProvider,
-    string $apiHost
-)
-````
+---
 
-`HttpClient` takes every PSR-18 compliant HTTP Client Adapter like `"php-http/curl-client": "^1.7"`
+## Supported Vault Operations
 
-`AuthenticationProviderInterface` Authentication Provider from `/authentication/provider/*`
+- Authentication
+  - Token
+  - AppRole
+  - User/Password
+  - Kubernetes
+- Transit Secret Engine
+  - Encrypt/Decrypt
+  - Update Key Config
+  - Create Key
+  - Delete Key
+  - List Keys
+  - Sign Data
 
-`$apiHost` Hashicorp Vault REST Endpoint URL
+---
 
-## Bulk Requests
-Using Bulk Requests also requires to iterate through the Response
-and calling `hasErrors` within the `MetaData` of each Bulk Item to ensure it was processed successfully.
+## Configuration
 
-## Exceptions
-Calling library methods will throw exceptions, indicating where ever invalid data was provided
-or HTTP errors occurred or Vault Generic Endpoint Errors are encountered.
-___
+You can inject any [PSR-18 HTTP Client](https://www.php-fig.org/psr/psr-18/) for maximum flexibility:
 
-`VaultException`
+```php
+$client = new Client(
+    $yourPsr18Client,
+    $auth,
+    'https://vault.example.com:1337'
+);
+```
 
-Generic Root Exception where every exception in this library extends from.
-___
+---
 
-`VaultHttpException`
+## Testing
 
-Exception will thrown when something inside the HTTP handling will cause an error.
-___
+To run the test suite:
 
-`VaultAuthenticationException`
+```bash
+composer install
+composer test
+```
 
-Will be thrown when API Endpoint Authentication fails.
-___
+---
 
-`VaultResponseException`
+## Security
 
-Will be thrown on 5xx status code errors.
-___
+If you discover any security issues, please see [`SECURITY.md`](SECURITY.md) for responsible disclosure guidelines.
 
-`InvalidRouteException`
+---
 
-Calling an Invalid/Non Existing/Disabled Vault API Endpoint will throw this Exception.
-___
+## License
 
-`InvalidDataException`
+This library is Open Source and distributed under the [MIT license](LICENSE).
 
-Exception indicates a failed server payload validation. 
+---
 
-___
+## Links
 
-`KeyNameNotFoundException`
+- [HashiCorp Vault](https://www.vaultproject.io/)
+- [mittwald/vaultPHP on GitHub](https://github.com/mittwald/vaultPHP)
 
-Will be thrown when trying to request an API Endpoint where the Key Name - that is indicated within the url - will not exist.
+---
