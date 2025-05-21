@@ -11,12 +11,12 @@ use VaultPHP\Response\EndpointResponse;
 final class EncryptDataResponse extends EndpointResponse
 {
     /** @var string */
-    protected $ciphertext = '';
+    protected string $ciphertext = '';
 
     /**
      * @return string
      */
-    public function getCiphertext()
+    public function getCiphertext(): string
     {
         return $this->ciphertext;
     }

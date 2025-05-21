@@ -11,12 +11,12 @@ use VaultPHP\Response\EndpointResponse;
 final class DecryptDataResponse extends EndpointResponse
 {
     /** @var string */
-    protected $plaintext = '';
+    protected string $plaintext = '';
 
     /**
      * @return string
      */
-    public function getPlaintext()
+    public function getPlaintext(): string
     {
         return base64_decode($this->plaintext);
     }

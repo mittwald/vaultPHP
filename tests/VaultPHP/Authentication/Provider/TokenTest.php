@@ -4,7 +4,6 @@ namespace Test\VaultPHP\Authentication\Provider;
 
 use PHPUnit\Framework\TestCase;
 use VaultPHP\Authentication\Provider\Token;
-use VaultPHP\Authentication\AuthenticationMetaData;
 
 /**
  * Class TokenTest
@@ -12,12 +11,11 @@ use VaultPHP\Authentication\AuthenticationMetaData;
  */
 final class TokenTest extends TestCase
 {
-    public function testGetToken()
+    public function testGetToken(): void
     {
         $tokenAuth = new Token('foobar');
         $tokenMeta = $tokenAuth->authenticate();
 
-        $this->assertInstanceOf(AuthenticationMetaData::class, $tokenMeta);
         $this->assertEquals('foobar', $tokenMeta->getClientToken());
     }
 }

@@ -3,9 +3,11 @@
 namespace Test\VaultPHP\SecretEngines\Engines\Transit;
 
 use Test\VaultPHP\SecretEngines\AbstractSecretEngineTestCase;
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultException;
 use VaultPHP\SecretEngines\Engines\Transit\EncryptionType;
 use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptDataRequest;
-use VaultPHP\SecretEngines\Engines\Transit\Response\EncryptDataResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Transit;
 
 /**
@@ -14,7 +16,12 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
  */
 final class EncryptDataTest extends AbstractSecretEngineTestCase
 {
-    public function testApiCall()
+    /**
+     * @throws InvalidRouteException
+     * @throws InvalidDataException
+     * @throws VaultException
+     */
+    public function testApiCall(): void
     {
         $encryptDataRequest = new EncryptDataRequest(
             'foobar',
@@ -38,13 +45,12 @@ final class EncryptDataTest extends AbstractSecretEngineTestCase
         $api = new Transit($client);
 
         $response = $api->encryptData($encryptDataRequest);
-        $this->assertInstanceOf(EncryptDataResponse::class, $response);
         $this->assertEquals('fooCipher', $response->getCiphertext());
 
         $this->assertEquals('foobar', $encryptDataRequest->getName());
         $this->assertEquals('fooNonce', $encryptDataRequest->getNonce());
         $this->assertEquals('fooContext', $encryptDataRequest->getContext());
-        $this->assertEquals(EncryptionType::AES_256_GCM_96, $encryptDataRequest->getType());
+        $this->assertEquals(EncryptionType::AES_256_GCM_96->value, $encryptDataRequest->getType());
         $this->assertEquals(base64_encode('encryptMe'), $encryptDataRequest->getPlaintext());
     }
 }

@@ -22,31 +22,26 @@ use VaultPHP\SecretEngines\Interfaces\ArrayExportInterface;
 use VaultPHP\SecretEngines\Interfaces\BulkResourceRequestInterface;
 use VaultPHP\SecretEngines\Interfaces\ResourceRequestInterface;
 
-class VaultClient
+final class VaultClient
 {
     /** @var string */
-    private $apiHost;
+    public string $apiHost;
 
     /** @var ClientInterface */
-    private $httpClient;
+    public ClientInterface $httpClient;
 
     /** @var AuthenticationProviderInterface */
-    private $authProvider;
+    public AuthenticationProviderInterface $authProvider;
 
     /** @var AuthenticationMetaData|null */
-    private $authenticationMetaData;
+    public ?AuthenticationMetaData $authenticationMetaData = null;
 
     /**
-     * VaultClient constructor.
      * @param ClientInterface $httpClient
      * @param AuthenticationProviderInterface $authProvider
      * @param string $apiHost
      */
-    public function __construct(
-        ClientInterface $httpClient,
-        AuthenticationProviderInterface $authProvider,
-        $apiHost
-    )
+    public function __construct(ClientInterface $httpClient, AuthenticationProviderInterface $authProvider, string $apiHost)
     {
         $this->httpClient = $httpClient;
         $this->apiHost = $apiHost;
@@ -59,7 +54,7 @@ class VaultClient
      * @return void
      * @throws VaultAuthenticationException
      */
-    private function authenticate()
+    private function authenticate(): void
     {
         if (!$this->authenticationMetaData) {
             try {
@@ -70,7 +65,7 @@ class VaultClient
                 }
 
                 $this->authenticationMetaData = $metaData;
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 throw new VaultAuthenticationException(
                     sprintf('AuthProvider %s failed to fetch token', get_class($this->authProvider)),
                     0,
@@ -81,16 +76,21 @@ class VaultClient
     }
 
     /**
-     * @param array|object $data
+     * @param ArrayExportInterface|array $data
      * @return string
      */
-    private function extractPayload($data)
+    private function extractPayload(ArrayExportInterface|array $data): string
     {
-        if (is_object($data) && $data instanceof ArrayExportInterface) {
+        if ($data instanceof ArrayExportInterface) {
             $data = $data->toArray();
         }
 
-        return json_encode($data);
+        $encodedData = json_encode($data);
+        if ($encodedData === false) {
+            return "";
+        }
+
+        return $encodedData;
     }
 
     /**
@@ -106,8 +106,13 @@ class VaultClient
      * @throws VaultException
      * @throws VaultHttpException
      */
-    public function sendApiRequest($method, $endpoint, $returnClass, $data = [], $authRequired = true)
-    {
+    public function sendApiRequest(
+        string $method,
+        string $endpoint,
+        string $returnClass,
+        ResourceRequestInterface|array $data = [],
+        bool $authRequired = true
+    ): mixed {
         if ($authRequired) {
             $this->authenticate();
         }
@@ -142,12 +147,11 @@ class VaultClient
      * @throws VaultResponseException
      */
     private function parseResponse(
-        RequestInterface $request,
+        RequestInterface  $request,
         ResponseInterface $response,
-        $returnClass,
-        $isBulkRequest
-    )
-    {
+        string            $returnClass,
+        bool $isBulkRequest
+    ): mixed {
         $status = $response->getStatusCode();
 
         /**
@@ -213,12 +217,12 @@ class VaultClient
      * @throws VaultException
      * @throws VaultHttpException
      */
-    private function sendRequest(RequestInterface $request)
+    private function sendRequest(RequestInterface $request): ResponseInterface
     {
         $requestWithDefaults = $this->getDefaultRequest($request);
         try {
             return $this->httpClient->sendRequest($requestWithDefaults);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw new VaultHttpException($exception->getMessage(), 0, $exception);
         }
     }
@@ -228,7 +232,7 @@ class VaultClient
      * @return RequestInterface
      * @throws VaultException
      */
-    private function getDefaultRequest(RequestInterface $request)
+    private function getDefaultRequest(RequestInterface $request): RequestInterface
     {
         $token = $this->authenticationMetaData ? $this->authenticationMetaData->getClientToken() : '';
         $hostEndpoint = parse_url($this->apiHost);

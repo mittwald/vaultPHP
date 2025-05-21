@@ -13,24 +13,42 @@ use VaultPHP\Response\MetaData;
  */
 final class MetaDataResponseTest extends TestCase
 {
-    private function createTestData()
+    private function array_map_assoc(callable $callback, array $array): array
+    {
+        return array_map(function($key) use ($callback, $array){
+            return $callback($key, $array[$key]);
+        }, array_keys($array));
+    }
+
+    private function createTestData(): array
     {
         $reflectionClass = new ReflectionClass(MetaData::class);
+        $classProperties = $reflectionClass->getProperties();
+        
+        $data = [];
+        foreach ($classProperties as $classProperty) {
+            $name = $classProperty->getName();
+            $nameMD5 = md5($name);
+            $type = $classProperty->getType();
+            $typeName = $type->getName() ?? '';
 
-        $classPropertyNames = array_map(function ($property) {
-            return $property->getName();
-        }, $reflectionClass->getProperties());
+            $data[$name] = match ($typeName) {
+                'string' => $nameMD5,
+                'int' => intval($nameMD5, 042),
+                'bool' => false,
+                'array' => [$nameMD5, $nameMD5],
+                'object' => (object)[$nameMD5, $nameMD5],
+                default => throw new \Error("unknown test data type {$type}"),
+            };
+        }
 
-        return array_combine(
-            $classPropertyNames,
-            array_map('md5', $classPropertyNames)
-        );
+        return $data;
     }
 
     private function checkDtoData($testData, $basicMetaData)
     {
+        $this->assertTrue($basicMetaData->hasErrors());
         $this->assertEquals($testData['errors'], $basicMetaData->getErrors());
-        $this->assertEquals(false, $basicMetaData->hasErrors());
         $this->assertEquals($testData['lease_duration'], $basicMetaData->getLeaseDuration());
         $this->assertEquals($testData['auth'], $basicMetaData->getAuth());
         $this->assertEquals($testData['lease_id'], $basicMetaData->getLeaseId());
@@ -43,7 +61,8 @@ final class MetaDataResponseTest extends TestCase
     public function testCanPopulateArrayDataToSelf()
     {
         $testData = $this->createTestData();
-        $basicMetaData = new MetaData((array)$testData);
+        $basicMetaData = new MetaData($testData);
+
         $this->checkDtoData($testData, $basicMetaData);
     }
 
@@ -51,10 +70,11 @@ final class MetaDataResponseTest extends TestCase
     {
         $testData = $this->createTestData();
         $basicMetaData = new MetaData((object)$testData);
+
         $this->checkDtoData($testData, $basicMetaData);
     }
 
-    public function testCheckForErrors()
+    public function testCheckForErrors(): void
     {
         $error = ["nO eXiStiNg kEy nAMed FOOOBAR cOULd bE foUnD"];
         $basicMetaData = new MetaData(['errors' => $error]);

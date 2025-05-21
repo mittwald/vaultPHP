@@ -5,7 +5,7 @@ namespace VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData;
 use VaultPHP\SecretEngines\Interfaces\EncryptionTypeRequestInterface;
 use VaultPHP\SecretEngines\Interfaces\NamedRequestInterface;
 use VaultPHP\SecretEngines\Interfaces\ResourceRequestInterface;
-use VaultPHP\SecretEngines\Traits\EncryptionTypeRequestTrait;
+use VaultPHP\SecretEngines\Traits\EncryptionTypeTrait;
 use VaultPHP\SecretEngines\Traits\NamedRequestTrait;
 
 /**
@@ -18,14 +18,14 @@ final class EncryptDataRequest extends EncryptData implements
     EncryptionTypeRequestInterface
 {
     use NamedRequestTrait;
-    use EncryptionTypeRequestTrait;
+    use EncryptionTypeTrait;
 
     /**
      * EncryptDataRequest constructor.
      * @param string $name
      * @param string $plaintext
      */
-    public function __construct($name, $plaintext)
+    public function __construct(string $name, string $plaintext)
     {
         parent::__construct($plaintext);
         $this->setName($name);

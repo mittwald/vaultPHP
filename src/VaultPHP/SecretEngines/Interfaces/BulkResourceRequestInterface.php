@@ -2,5 +2,6 @@
 
 namespace VaultPHP\SecretEngines\Interfaces;
 
-interface BulkResourceRequestInterface extends ResourceRequestInterface {
+interface BulkResourceRequestInterface extends ResourceRequestInterface
+{
 }

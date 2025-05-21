@@ -15,7 +15,7 @@ trait ArrayExportTrait
      * @param array $input
      * @return array
      */
-    private function array_map_r($callback, $input)
+    private function array_map_r(callable $callback, array $input): array
     {
         $output = [];
 
@@ -38,12 +38,12 @@ trait ArrayExportTrait
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $data = get_object_vars($this);
         $result = $this->array_map_r(
-        /** @psalm-suppress MissingClosureParamType */
-        function ($v) {
+            /** @psalm-suppress MissingClosureParamType */
+            function ($v) {
                 if ($v instanceof ArrayExportInterface) {
                     return $v->toArray();
                 }

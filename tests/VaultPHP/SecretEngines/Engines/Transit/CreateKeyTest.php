@@ -3,6 +3,9 @@
 namespace Test\VaultPHP\SecretEngines\Engines\Transit;
 
 use Test\VaultPHP\SecretEngines\AbstractSecretEngineTestCase;
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultException;
 use VaultPHP\SecretEngines\Engines\Transit\Request\CreateKeyRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Response\CreateKeyResponse;
 use VaultPHP\SecretEngines\Engines\Transit\EncryptionType;
@@ -14,7 +17,12 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
  */
 final class CreateKeyTest extends AbstractSecretEngineTestCase
 {
-    public function testApiCall()
+    /**
+     * @throws VaultException
+     * @throws InvalidRouteException
+     * @throws InvalidDataException
+     */
+    public function testApiCall(): void
     {
         $createKey = new CreateKeyRequest('foobar');
         $createKey->setType(EncryptionType::CHA_CHA_20_POLY_1305);
@@ -32,6 +40,6 @@ final class CreateKeyTest extends AbstractSecretEngineTestCase
         $this->assertInstanceOf(CreateKeyResponse::class, $response);
 
         $this->assertEquals('foobar', $createKey->getName());
-        $this->assertEquals(EncryptionType::CHA_CHA_20_POLY_1305, $createKey->getType());
+        $this->assertEquals(EncryptionType::CHA_CHA_20_POLY_1305->value, $createKey->getType());
     }
 }

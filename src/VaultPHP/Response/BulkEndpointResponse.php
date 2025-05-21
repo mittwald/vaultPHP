@@ -11,24 +11,19 @@ use VaultPHP\Exceptions\VaultException;
  * Class BulkEndpointResponse
  *
  * @template-implements Iterator<int>
- * @template-implements ArrayAccess<int, mixed>
+ * @template-implements ArrayAccess<int, static>
  */
-class BulkEndpointResponse extends EndpointResponse implements Iterator, ArrayAccess, Countable
+final class BulkEndpointResponse extends EndpointResponse implements Iterator, ArrayAccess, Countable
 {
     /** @var integer */
-    private $iteratorPosition = 0;
+    private int $iteratorPosition = 0;
 
-    /**
-     * @var array
-     */
-    protected $batch_results = [];
+    protected array $batch_results = [];
 
-    /**
-     * @return bool
-     */
-    public function hasErrors() {
+    #[\Override]
+    public function hasErrors(): bool
+    {
         $errorOccurred = $this->getMetaData()->hasErrors();
-
         if (!$errorOccurred) {
             /** @var EndpointResponse $batchResult */
             foreach ($this as $batchResult) {
@@ -42,96 +37,69 @@ class BulkEndpointResponse extends EndpointResponse implements Iterator, ArrayAc
         return $errorOccurred;
     }
 
-    /**
-     * @return array
-     */
-    public function getBatchResults(): array
-    {
-        return $this->batch_results;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function current()
+    #[\Override]
+    public function current(): mixed
     {
         return $this->batch_results[$this->iteratorPosition];
     }
 
-    /**
-     * @return void
-     */
-    public function next()
+    #[\Override]
+    public function next(): void
     {
         ++$this->iteratorPosition;
     }
 
-    /**
-     * @return integer
-     */
-    public function key()
+    #[\Override]
+    public function key(): int
     {
         return $this->iteratorPosition;
     }
 
-    /**
-     * @return bool
-     */
-    public function valid()
+    #[\Override]
+    public function valid(): bool
     {
         return isset($this->batch_results[$this->iteratorPosition]);
     }
 
-    /**
-     * @return void
-     */
-    public function rewind()
+    #[\Override]
+    public function rewind(): void
     {
         $this->iteratorPosition = 0;
     }
 
-    /**
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->batch_results);
-    }
-
-    /**
-     * @param integer $offset
-     * @return bool
-     */
-    public function offsetExists($offset)
+    #[\Override]
+    public function offsetExists($offset): bool
     {
         return isset($this->batch_results[$offset]);
     }
 
-    /**
-     * @param integer $offset
-     * @return mixed
-     */
-    public function offsetGet($offset)
+    #[\Override]
+    public function offsetGet($offset): mixed
     {
         return $this->batch_results[$offset];
     }
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
      * @throws VaultException
      */
-    public function offsetSet($offset, $value)
+    #[\Override]
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         throw new VaultException('readonly');
     }
 
     /**
-     * @param mixed $offset
      * @throws VaultException
      */
-    public function offsetUnset($offset)
+    #[\Override]
+    public function offsetUnset(mixed $offset): void
     {
         throw new VaultException('readonly');
+    }
+
+    #[\Override]
+    public function count(): int
+    {
+        return count($this->batch_results);
     }
 }

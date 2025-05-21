@@ -34,13 +34,13 @@ final class Transit extends AbstractSecretEngine
     /**
      * @var string
      */
-    private $APIPath = 'transit';
+    private string $APIPath = 'transit';
 
     /**
      * @param string $path
      * @return void
      */
-    public function setAPIPath(string $path)
+    public function setAPIPath(string $path): void
     {
         $this->APIPath = $path;
     }
@@ -52,7 +52,7 @@ final class Transit extends AbstractSecretEngine
      * @throws InvalidRouteException
      * @throws VaultException
      */
-    public function createKey(CreateKeyRequest $createKeyRequest)
+    public function createKey(CreateKeyRequest $createKeyRequest): CreateKeyResponse
     {
         /** @var CreateKeyResponse */
         return $this->vaultClient->sendApiRequest(
@@ -70,7 +70,7 @@ final class Transit extends AbstractSecretEngine
      * @throws InvalidRouteException
      * @throws VaultException
      */
-    public function encryptData(EncryptDataRequest $encryptDataRequest)
+    public function encryptData(EncryptDataRequest $encryptDataRequest): EncryptDataResponse
     {
         /** @var EncryptDataResponse */
         return $this->vaultClient->sendApiRequest(
@@ -88,7 +88,7 @@ final class Transit extends AbstractSecretEngine
      * @throws InvalidRouteException
      * @throws VaultException
      */
-    public function encryptDataBulk(EncryptDataBulkRequest $encryptDataBulkRequest)
+    public function encryptDataBulk(EncryptDataBulkRequest $encryptDataBulkRequest): BulkEndpointResponse
     {
         /** @var BulkEndpointResponse */
         return $this->vaultClient->sendApiRequest(
@@ -106,7 +106,7 @@ final class Transit extends AbstractSecretEngine
      * @throws InvalidRouteException
      * @throws VaultException
      */
-    public function decryptData(DecryptDataRequest $decryptDataRequest)
+    public function decryptData(DecryptDataRequest $decryptDataRequest): DecryptDataResponse
     {
         /** @var DecryptDataResponse */
         return $this->vaultClient->sendApiRequest(
@@ -126,7 +126,7 @@ final class Transit extends AbstractSecretEngine
      * @throws VaultAuthenticationException
      * @throws VaultHttpException
      */
-    public function decryptDataBulk(DecryptDataBulkRequest $decryptDataBulkRequest)
+    public function decryptDataBulk(DecryptDataBulkRequest $decryptDataBulkRequest): BulkEndpointResponse
     {
         /** @var BulkEndpointResponse */
         return $this->vaultClient->sendApiRequest(
@@ -143,12 +143,12 @@ final class Transit extends AbstractSecretEngine
      * @throws InvalidRouteException
      * @throws VaultException
      */
-    public function listKeys()
+    public function listKeys(): ListKeysResponse
     {
         /** @var ListKeysResponse */
         return $this->vaultClient->sendApiRequest(
             'LIST',
-            sprintf('/v1/%s/keys', $this->APIPath,),
+            sprintf('/v1/%s/keys', $this->APIPath, ),
             ListKeysResponse::class,
             []
         );
@@ -161,7 +161,7 @@ final class Transit extends AbstractSecretEngine
      * @throws InvalidRouteException
      * @throws VaultException
      */
-    public function deleteKey($name)
+    public function deleteKey(string $name): EndpointResponse
     {
         /** @var EndpointResponse */
         return $this->vaultClient->sendApiRequest(
@@ -179,7 +179,7 @@ final class Transit extends AbstractSecretEngine
      * @throws InvalidRouteException
      * @throws VaultException
      */
-    public function updateKeyConfig(UpdateKeyConfigRequest $updateKeyConfigRequest)
+    public function updateKeyConfig(UpdateKeyConfigRequest $updateKeyConfigRequest): UpdateKeyConfigResponse
     {
         /** @var UpdateKeyConfigResponse */
         return $this->vaultClient->sendApiRequest(
@@ -197,7 +197,7 @@ final class Transit extends AbstractSecretEngine
      * @throws InvalidRouteException
      * @throws VaultException
      */
-    public function sign(SignDataRequest $signDataRequest)
+    public function sign(SignDataRequest $signDataRequest): SignDataResponse
     {
         return $this->vaultClient->sendApiRequest(
             'POST',

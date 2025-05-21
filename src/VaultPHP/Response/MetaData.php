@@ -2,64 +2,53 @@
 
 namespace VaultPHP\Response;
 
+use VaultPHP\SecretEngines\Traits\PopulateDataTrait;
+
 /**
  * Class MetaData
  * @package VaultPHP\Response
  */
-class MetaData implements MetaDataInterface
+final class MetaData implements MetaDataInterface
 {
-    /** @var string|null */
-    private $request_id;
+    use PopulateDataTrait;
 
     /** @var string|null */
-    private $lease_id;
+    private ?string $request_id = null;
 
-    /** @var boolean|null */
-    private $renewable;
+    /** @var string|null */
+    private ?string $lease_id = null;
+
+    /** @var boolean */
+    private bool $renewable = false;
 
     /** @var integer|null */
-    private $lease_duration;
+    private ?int $lease_duration = null;
 
     /** @var string|null */
-    private $wrap_info;
+    private ?string $wrap_info = null;
 
     /** @var string[] */
-    private $warnings = [];
+    private array $warnings = [];
 
     /** @var object|null */
-    private $auth;
+    private ?object $auth = null;
 
     /** @var string[] */
-    private $errors = [];
+    private array $errors = [];
 
     /**
      * MetaData constructor.
      * @param array|object $data
      */
-    public function __construct($data = [])
+    public function __construct(array|object $data = [])
     {
         $this->populateData($data);
     }
 
     /**
-     * @param array|object $data
-     * @return void
-     */
-    private function populateData($data)
-    {
-        /** @var string $key */
-        /** @var mixed $value */
-        foreach ($data as $key => $value) {
-            if (property_exists(self::class, (string) $key)) {
-                $this->$key = $value;
-            }
-        }
-    }
-
-    /**
      * @return string|null
      */
-    public function getRequestId()
+    public function getRequestId(): ?string
     {
         return $this->request_id;
     }
@@ -67,7 +56,7 @@ class MetaData implements MetaDataInterface
     /**
      * @return string|null
      */
-    public function getLeaseId()
+    public function getLeaseId(): ?string
     {
         return $this->lease_id;
     }
@@ -75,7 +64,7 @@ class MetaData implements MetaDataInterface
     /**
      * @return bool|null
      */
-    public function getRenewable()
+    public function getRenewable(): ?bool
     {
         return $this->renewable;
     }
@@ -83,15 +72,25 @@ class MetaData implements MetaDataInterface
     /**
      * @return int|null
      */
-    public function getLeaseDuration()
+    public function getLeaseDuration(): ?int
     {
         return $this->lease_duration;
     }
 
     /**
+     * @param mixed $lease_duration
+     * @return void
+     */
+    public function setLeaseDuration(mixed $lease_duration): void
+    {
+        $this->lease_duration = (int) $lease_duration;
+    }
+
+
+    /**
      * @return string|null
      */
-    public function getWrapInfo()
+    public function getWrapInfo(): ?string
     {
         return $this->wrap_info;
     }
@@ -99,7 +98,7 @@ class MetaData implements MetaDataInterface
     /**
      * @return string[]
      */
-    public function getWarnings()
+    public function getWarnings(): array
     {
         return $this->warnings;
     }
@@ -107,15 +106,18 @@ class MetaData implements MetaDataInterface
     /**
      * @return object|null
      */
-    public function getAuth()
+    #[\Override]
+    public function getAuth(): ?object
     {
         return $this->auth;
     }
 
+
     /**
      * @return string[]
      */
-    public function getErrors()
+    #[\Override]
+    public function getErrors(): array
     {
         return $this->errors;
     }
@@ -124,8 +126,9 @@ class MetaData implements MetaDataInterface
      * @param array $error
      * @return boolean
      */
-    public function containsError($error) {
-        /** @var string $apiError */
+    #[\Override]
+    public function containsError(array $error): bool
+    {
         foreach ($this->getErrors() as $apiError) {
             /** @var string $errorMessage */
             foreach ($error as $errorMessage) {
@@ -140,9 +143,10 @@ class MetaData implements MetaDataInterface
     /**
      * @return boolean
      */
-    public function hasErrors()
+    #[\Override]
+    public function hasErrors(): bool
     {
         $errors = $this->getErrors();
-        return is_array($errors) && count($errors) >= 1;
+        return count($errors) >= 1;
     }
 }

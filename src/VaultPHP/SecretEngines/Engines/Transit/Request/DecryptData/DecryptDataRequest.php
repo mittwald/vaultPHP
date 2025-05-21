@@ -19,7 +19,7 @@ final class DecryptDataRequest extends DecryptData implements ResourceRequestInt
      * @param string $name
      * @param string $ciphertext
      */
-    public function __construct($name, $ciphertext)
+    public function __construct(string $name, string $ciphertext)
     {
         parent::__construct($ciphertext);
         $this->setName($name);

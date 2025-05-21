@@ -7,16 +7,20 @@
     "require": {
         "ext-json": "*",
         "guzzlehttp/psr7": "^2.7.1",
-        "php": "^7.2.5 || <=8.3.21",
-        "psr/http-client": "1.0.3"
+        "php": ">=8.3",
+        "psr/http-client": "^1.0.3"
     },
     "suggest": {
         "php-http/curl-client": "CURL Client Adapter",
         "tuupola/http-factory": "HTTP Factory"
     },
     "require-dev": {
-        "phpunit/phpunit": "9.6.23",
-        "vimeo/psalm": "5.26.1"
+        "friendsofphp/php-cs-fixer": "^v3.75.0",
+        "symfony/http-client": "^v7.2.4",
+        "nyholm/psr7": "^1.8.2",
+        "php-http/mock-client": "^1.6.1",
+        "phpunit/phpunit": "^12.1.5",
+        "vimeo/psalm": "^6.10.3"
     },
     "authors": [
         {
@@ -35,6 +39,12 @@
         }
     },
     "scripts": {
-        "test": "php ./vendor/bin/phpunit --configuration ./phpunit.xml.dist"
+        "test": "php ./vendor/bin/phpunit --configuration ./phpunit.xml.dist",
+        "pretty": "php ./vendor/bin/php-cs-fixer fix ./src"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": false
+        }
     }
 }

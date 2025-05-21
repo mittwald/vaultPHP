@@ -15,16 +15,16 @@ use VaultPHP\Response\EndpointResponse;
  * Class AppRole
  * @package VaultPHP\Authentication\Provider
  */
-class AppRole extends AbstractAuthenticationProvider
+final class AppRole extends AbstractAuthenticationProvider
 {
     /** @var string */
-    private $roleId;
+    private string $roleId;
 
     /** @var string */
-    private $secretId;
+    private string $secretId;
 
     /** @var string  */
-    private $endpoint = '/v1/auth/approle/login';
+    public const string endpoint = '/v1/auth/approle/login';
 
     /**
      * AppRole constructor.
@@ -34,29 +34,30 @@ class AppRole extends AbstractAuthenticationProvider
     public function __construct(string $roleId, string $secretId)
     {
         $this->roleId = $roleId;
-        $this->secretId= $secretId;
+        $this->secretId = $secretId;
     }
 
     /**
-     * @return bool|AuthenticationMetaData
+     * @return AuthenticationMetaData|false
+     *
      * @throws InvalidDataException
      * @throws InvalidRouteException
      * @throws VaultAuthenticationException
      * @throws VaultException
      * @throws VaultHttpException
      */
-    public function authenticate()
+    #[\Override]
+    public function authenticate(): bool|AuthenticationMetaData
     {
         /** @var EndpointResponse $response */
-        $response = $this->getVaultClient()->sendApiRequest(
+        $response = $this->sendApiRequest(
             'POST',
-            $this->endpoint,
+            $this::endpoint,
             EndpointResponse::class,
             [
                 'role_id' => $this->roleId,
                 'secret_id' => $this->secretId,
-            ],
-            false
+            ]
         );
 
         if ($auth = $response->getMetaData()->getAuth()) {

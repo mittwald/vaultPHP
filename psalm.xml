@@ -3,7 +3,7 @@
     totallyTyped="false"
     allowPhpStormGenerics="true"
     allowStringToStandInForClass="true"
-    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
     xmlns="https://getpsalm.org/schema/config"
 >
     <projectFiles>
@@ -11,11 +11,6 @@
     </projectFiles>
 
     <issueHandlers>
-        <!-- can't do this while still supporting PHP 5 -->
-        <MissingParamType errorLevel="suppress" />
-        <ReservedWord errorLevel="suppress" />
-        <MissingClosureReturnType errorLevel="suppress" />
-
         <!-- more checks than necessary don't hurt -->
         <RedundantConditionGivenDocblockType errorLevel="suppress" />
         <DocblockTypeContradiction errorLevel="suppress" />

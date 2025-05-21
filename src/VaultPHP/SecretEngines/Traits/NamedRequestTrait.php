@@ -9,21 +9,29 @@ namespace VaultPHP\SecretEngines\Traits;
 trait NamedRequestTrait
 {
     /** @var string */
-    protected $name;
+    protected string $name = "";
+
+    /**
+     * @param string $name
+     */
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
      * @param string $name
-     * @return $this
+     * @return static
      */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
         return $this;

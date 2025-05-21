@@ -2,7 +2,6 @@
 
 namespace VaultPHP\Authentication;
 
-use VaultPHP\Exceptions\VaultException;
 use VaultPHP\VaultClient;
 
 /**
@@ -14,17 +13,11 @@ interface AuthenticationProviderInterface
     /**
      * @return AuthenticationMetaData|boolean
      */
-    public function authenticate();
+    public function authenticate(): AuthenticationMetaData|bool;
 
     /**
      * @param VaultClient $VaultClient
      * @return void
      */
-    public function setVaultClient(VaultClient $VaultClient);
-
-    /**
-     * @return VaultClient
-     * @throws VaultException
-     */
-    public function getVaultClient();
+    public function setVaultClient(VaultClient $VaultClient): void;
 }

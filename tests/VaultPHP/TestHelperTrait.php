@@ -3,8 +3,15 @@
 namespace Test\VaultPHP;
 
 use GuzzleHttp\Psr7\Response;
-use Psr\Http\Client\ClientInterface;
+use Http\Mock\Client;
+use PHPUnit\Framework\MockObject\Exception;
+use VaultPHP\Authentication\AuthenticationProviderInterface;
 use VaultPHP\Authentication\Provider\Token;
+use VaultPHP\Exceptions\InvalidDataException;
+use VaultPHP\Exceptions\InvalidRouteException;
+use VaultPHP\Exceptions\VaultAuthenticationException;
+use VaultPHP\Exceptions\VaultException;
+use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Response\EndpointResponse;
 use VaultPHP\VaultClient;
 
@@ -15,28 +22,31 @@ use VaultPHP\VaultClient;
 trait TestHelperTrait {
 
     /**
-     * @param $responseStatus
+     * @param int $responseStatus
      * @param string $responseBody
      * @param array $responseHeader
      * @return mixed
-     * @throws \VaultPHP\Exceptions\InvalidDataException
-     * @throws \VaultPHP\Exceptions\InvalidRouteException
-     * @throws \VaultPHP\Exceptions\VaultAuthenticationException
-     * @throws \VaultPHP\Exceptions\VaultException
-     * @throws \VaultPHP\Exceptions\VaultHttpException
+     * @throws InvalidDataException
+     * @throws InvalidRouteException
+     * @throws VaultAuthenticationException
+     * @throws VaultException
+     * @throws VaultHttpException
      */
-    private function simulateApiResponse($responseStatus, $responseBody = '', $responseHeader = []) {
+    private function simulateApiResponse(int $responseStatus, string $responseBody = '', array $responseHeader = []): mixed
+    {
         $response = new Response($responseStatus, $responseHeader, $responseBody);
         $auth = new Token('fooToken');
 
-        $httpClient = $this->createMock(ClientInterface::class);
-
-        $httpClient
-            ->expects($this->once())
-            ->method('sendRequest')
-            ->willReturn($response);
+        $httpClient = new Client();
+        $httpClient->addResponse($response);
 
         $client = new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
-        return $client->sendApiRequest('GET', '/foo', EndpointResponse::class);
+        return $client->sendApiRequest("GET", "/mocked", EndpointResponse::class);
+    }
+
+    private function mockedVaultClient(Response $response, AuthenticationProviderInterface $auth = new Token("fakeToken")): VaultClient {
+        $httpClient = new Client();
+        $httpClient->addResponse($response);
+        return new VaultClient($httpClient, $auth, "http://mocked:1337");
     }
 }

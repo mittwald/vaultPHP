@@ -13,10 +13,10 @@ use VaultPHP\Response\EndpointResponse;
 class VaultResponseException extends VaultException
 {
     /** @var RequestInterface */
-    private $request;
+    private RequestInterface $request;
 
     /** @var ResponseInterface */
-    private $response;
+    private ResponseInterface $response;
 
     /**
      * VaultResponseException constructor.
@@ -31,23 +31,17 @@ class VaultResponseException extends VaultException
 
         $parsedResponse = EndpointResponse::fromResponse($response);
         $returnedErrors = $parsedResponse->getMetaData()->getErrors();
-        $errors = implode(', ',  is_array($returnedErrors) ? $returnedErrors : []);
+        $errors = implode(', ', $returnedErrors);
 
         parent::__construct($errors, $response->getStatusCode(), $prevException);
     }
 
-    /**
-     * @return RequestInterface
-     */
-    public function getRequest()
+    public function getRequest(): RequestInterface
     {
         return $this->request;
     }
 
-    /**
-     * @return ResponseInterface
-     */
-    public function getResponse()
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

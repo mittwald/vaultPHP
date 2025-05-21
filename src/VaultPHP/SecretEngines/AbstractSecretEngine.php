@@ -11,7 +11,7 @@ use VaultPHP\VaultClient;
 abstract class AbstractSecretEngine
 {
     /** @var VaultClient */
-    protected $vaultClient;
+    protected VaultClient $vaultClient;
 
     /**
      * @param VaultClient $VaultClient

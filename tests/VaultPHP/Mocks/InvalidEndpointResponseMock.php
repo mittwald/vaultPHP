@@ -4,6 +4,15 @@ namespace Test\VaultPHP\Mocks;
 
 use Psr\Http\Message\ResponseInterface;
 use VaultPHP\Response\EndpointResponse;
+use VaultPHP\Response\MetaData;
+
+class InvalidStaticClass
+{
+    const someAction = "invalid";
+
+    public static function someAction() {
+    }
+}
 
 /**
  * Class InvalidEndpointResponseMock
@@ -11,21 +20,14 @@ use VaultPHP\Response\EndpointResponse;
  */
 class InvalidEndpointResponseMock extends EndpointResponse {
 
-    /**
-     * @param ResponseInterface $response
-     * @return mixed
-     */
-    public static function fromResponse(ResponseInterface $response)
+    #[\Override]
+    public function getMetaData(): \VaultPHP\Response\MetaData
     {
-        return 'IamInvalid';
+        return new MetaData();
     }
 
-    public function getMetaData()
-    {
-        return false;
-    }
-
-    public function hasErrors()
+    #[\Override]
+    public function hasErrors(): bool
     {
         return true;
     }

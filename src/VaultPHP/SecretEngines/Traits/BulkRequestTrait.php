@@ -8,26 +8,25 @@ namespace VaultPHP\SecretEngines\Traits;
  */
 trait BulkRequestTrait
 {
-    /** @var mixed[] */
-    protected $batch_input = [];
+    /** @var array */
+    protected array $batch_input = [];
 
     /**
      * @param mixed $request
-     * @return $this
+     * @return static
      */
-    public function addBulkRequest($request)
+    public function addBulkRequest(mixed $request): static
     {
         $this->batch_input[] = $request;
         return $this;
     }
 
     /**
-     * @param mixed[] $requests
+     * @param array $requests
      * @return void
      */
-    public function addBulkRequests($requests)
+    public function addBulkRequests(array $requests): void
     {
-        /** @var mixed $request */
         foreach ($requests as $request) {
             $this->addBulkRequest($request);
         }

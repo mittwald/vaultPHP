@@ -14,21 +14,21 @@ class EncryptData implements ArrayExportInterface
     use ArrayExportTrait;
 
     /** @var string */
-    protected $plaintext;
+    protected string $plaintext = '';
 
     /** @var string|null */
-    protected $context;
+    protected ?string $context = null;
 
     /** @var string|null */
-    protected $nonce;
+    protected ?string $nonce = null;
 
     /**
      * EncryptData constructor.
      * @param string $plaintext
-     * @param null|string $context
-     * @param null|string $nonce
+     * @param string|null $context
+     * @param string|null $nonce
      */
-    public function __construct($plaintext, $context = null, $nonce = null)
+    public function __construct(string $plaintext, string $context = null, string $nonce = null)
     {
         $this->setPlaintext($plaintext);
         $this->setContext($context);
@@ -36,56 +36,56 @@ class EncryptData implements ArrayExportInterface
     }
 
     /**
-     * @return string
-     */
-    public function getPlaintext()
-    {
-        return $this->plaintext;
-    }
-
-    /**
      * @param string $plaintext
-     * @return self
+     * @return static
      */
-    public function setPlaintext($plaintext)
+    public function setPlaintext(string $plaintext): static
     {
         $this->plaintext = base64_encode($plaintext);
         return $this;
     }
 
     /**
-     * @return string|null
-     */
-    public function getNonce()
-    {
-        return $this->nonce;
-    }
-
-    /**
      * @param string|null $nonce
-     * @return self
+     * @return static
      */
-    public function setNonce($nonce)
+    public function setNonce(?string $nonce): static
     {
         $this->nonce = $nonce;
         return $this;
     }
 
     /**
+     * @param string|null $context
+     * @return static
+     */
+    public function setContext(?string $context): static
+    {
+        $this->context = $context;
+        return $this;
+    }
+
+    /**
      * @return string|null
      */
-    public function getContext()
+    public function getNonce(): ?string
+    {
+        return $this->nonce;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getContext(): ?string
     {
         return $this->context;
     }
 
     /**
-     * @param string|null $context
-     * @return self
+     * @return string
      */
-    public function setContext($context)
+    public function getPlaintext(): string
     {
-        $this->context = $context;
-        return $this;
+        return $this->plaintext;
     }
 }

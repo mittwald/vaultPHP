@@ -3,6 +3,7 @@
 namespace VaultPHP\Response;
 
 use Psr\Http\Message\ResponseInterface;
+use VaultPHP\SecretEngines\Traits\PopulateDataTrait;
 
 /**
  * Class EndpointResponse
@@ -10,22 +11,24 @@ use Psr\Http\Message\ResponseInterface;
  */
 class EndpointResponse implements EndpointResponseInterface
 {
+    use PopulateDataTrait;
+
     /** @var MetaData */
-    protected $metaData;
+    protected MetaData $metaData;
 
     /**
      * EndpointResponse constructor.
-     * @param array|object $data
+     * @param object|array $data
      * @param array $meta
      */
-    final public function __construct($data = [], $meta = [])
+    final public function __construct(object|array $data = [], array $meta = [])
     {
         $this->metaData = new MetaData($meta);
         $this->populateData($data);
     }
 
     /**
-     * @param $response
+     * @param ResponseInterface $response
      * @return array
      */
     protected static function getResponseContent(ResponseInterface $response): array
@@ -43,12 +46,13 @@ class EndpointResponse implements EndpointResponseInterface
      * @param ResponseInterface $response
      * @return static
      */
-    public static function fromResponse(ResponseInterface $response)
+    #[\Override]
+    public static function fromResponse(ResponseInterface $response): static
     {
         $metaData = static::getResponseContent($response);
 
         /** @var object|array $domainData */
-        $domainData = isset($metaData['data']) ? $metaData['data'] : [];
+        $domainData = $metaData['data'] ?? [];
         unset($metaData['data']);
 
         return new static($domainData, $metaData);
@@ -58,16 +62,16 @@ class EndpointResponse implements EndpointResponseInterface
      * @param ResponseInterface $response
      * @return BulkEndpointResponse
      */
-    static function fromBulkResponse(ResponseInterface $response)
+    public static function fromBulkResponse(ResponseInterface $response): BulkEndpointResponse
     {
         $metaData = static::getResponseContent($response);
 
         /** @var object|array $domainData */
-        $domainData = isset($metaData['data']) ? $metaData['data'] : [];
+        $domainData = $metaData['data'] ?? [];
         unset($metaData['data']);
 
         $responseDTO = new BulkEndpointResponse($domainData, $metaData);
-        $responseDTO->batch_results = array_map(function($batchResult) {
+        $responseDTO->batch_results = array_map(function ($batchResult) {
             /** @var object $batchResult */
 
             $errors = isset($batchResult->error) && $batchResult->error ? explode(', ', (string) $batchResult->error) : [];
@@ -80,24 +84,10 @@ class EndpointResponse implements EndpointResponseInterface
     }
 
     /**
-     * @param array|object $data
-     * @return void
-     */
-    private function populateData($data)
-    {
-        /** @var string $key */
-        /** @var mixed $value */
-        foreach ($data as $key => $value) {
-            if (property_exists(static::class, (string) $key)) {
-                $this->$key = $value;
-            }
-        }
-    }
-
-    /**
      * @return MetaData
      */
-    public function getMetaData()
+    #[\Override]
+    public function getMetaData(): MetaData
     {
         return $this->metaData;
     }
@@ -105,7 +95,7 @@ class EndpointResponse implements EndpointResponseInterface
     /**
      * @return bool
      */
-    public function hasErrors()
+    public function hasErrors(): bool
     {
         return $this->getMetaData()->hasErrors();
     }
