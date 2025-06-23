@@ -16,7 +16,7 @@ final class AuthenticationMetaData
      * AuthenticationMetaData constructor.
      * @param object|null $fromAuth
      */
-    public function __construct(object $fromAuth = null)
+    public function __construct(?object $fromAuth = null)
     {
         if ($fromAuth) {
             $this->token = (string) $fromAuth->client_token;

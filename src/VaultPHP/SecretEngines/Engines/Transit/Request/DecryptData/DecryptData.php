@@ -29,7 +29,7 @@ class DecryptData implements ArrayExportInterface
      * @param string|null $context
      * @param string|null $nonce
      */
-    public function __construct(string $ciphertext, string $context = null, string $nonce = null)
+    public function __construct(string $ciphertext, ?string $context = null, ?string $nonce = null)
     {
         $this->setCiphertext($ciphertext);
         $this->setContext($context);
