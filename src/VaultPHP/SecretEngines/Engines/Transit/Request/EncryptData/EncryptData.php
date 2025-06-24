@@ -29,7 +29,7 @@ class EncryptData implements ArrayExportInterface
      * @param string|null $context
      * @param string|null $nonce
      */
-    public function __construct(string $plaintext, string $context = null, string $nonce = null)
+    public function __construct(string $plaintext, ?string $context = null, ?string $nonce = null)
     {
         $this->setPlaintext($plaintext);
         $this->setContext($context);
