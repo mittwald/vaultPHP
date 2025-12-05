@@ -134,7 +134,9 @@ final class VaultClient
 
         // Looks like psalm can't handle the method exists with static functions
         if (!$isBulkRequest) {
-            // @psalm-suppress ArgumentTypeCoercion
+            /**
+             * @psalm-suppress ArgumentTypeCoercion
+             */
             if (!method_exists($returnClass, 'fromResponse')) {
                 throw new VaultException('Return Class declaration lacks static::fromResponse');
             }
@@ -142,7 +144,9 @@ final class VaultClient
             /** @var EndpointResponse $responseDataDTO */
             $responseDataDTO = $returnClass::fromResponse($response);
         } else {
-            // @psalm-suppress ArgumentTypeCoercion
+            /**
+             * @psalm-suppress ArgumentTypeCoercion
+             */
             if (!method_exists($returnClass, 'fromBulkResponse')) {
                 throw new VaultException('Return Class declaration lacks static::fromBulkResponse');
             }
