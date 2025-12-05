@@ -39,6 +39,7 @@ final class ExceptionsTest extends TestCase
 
         $auth = new Token('fooToken');
         $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->never())->method('sendRequest');
 
         $client = new VaultClient($httpClient, $auth, "imInvalidHost");
         $client->sendApiRequest('LOL', '/i/should/be/preserved', EndpointResponse::class, ['dontReplaceMe']);
@@ -63,6 +64,8 @@ final class ExceptionsTest extends TestCase
         $this->expectException(VaultAuthenticationException::class);
 
         $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->never())->method('sendRequest');
+
         $auth = $this->createMock(AuthenticationProviderInterface::class);
         $auth
             ->expects($this->once())
