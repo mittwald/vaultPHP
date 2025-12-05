@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\SecretEngines\Engines\Transit\Response;
@@ -6,8 +7,7 @@ namespace VaultPHP\SecretEngines\Engines\Transit\Response;
 use VaultPHP\Response\EndpointResponse;
 
 /**
- * Class ListKeysResponse
- * @package VaultPHP\SecretEngines\Transit\Response
+ * Class ListKeysResponse.
  */
 final class ListKeysResponse extends EndpointResponse
 {

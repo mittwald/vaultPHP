@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\Authentication\Provider;
@@ -13,24 +14,18 @@ use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Response\EndpointResponse;
 
 /**
- * Class AppRole
- * @package VaultPHP\Authentication\Provider
+ * Class AppRole.
  */
 final class AppRole extends AbstractAuthenticationProvider
 {
     /** @var string */
+    public const string endpoint = '/v1/auth/approle/login';
     private string $roleId;
 
-    /** @var string */
     private string $secretId;
-
-    /** @var string  */
-    const string endpoint = '/v1/auth/approle/login';
 
     /**
      * AppRole constructor.
-     * @param string $roleId
-     * @param string $secretId
      */
     public function __construct(string $roleId, string $secretId)
     {
@@ -48,7 +43,7 @@ final class AppRole extends AbstractAuthenticationProvider
      * @throws VaultHttpException
      */
     #[\Override]
-    public function authenticate(): bool|AuthenticationMetaData
+    public function authenticate(): AuthenticationMetaData|bool
     {
         /** @var EndpointResponse $response */
         $response = $this->sendApiRequest(

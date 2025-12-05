@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\SecretEngines\Engines\Transit\Request;
@@ -10,8 +11,7 @@ use VaultPHP\SecretEngines\Traits\EncryptionTypeTrait;
 use VaultPHP\SecretEngines\Traits\NamedRequestTrait;
 
 /**
- * Class CreateKeyRequest
- * @package VaultPHP\SecretEngines\Transit\Request
+ * Class CreateKeyRequest.
  */
 final class CreateKeyRequest implements ResourceRequestInterface, NamedRequestInterface
 {

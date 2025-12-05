@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\Authentication;
@@ -12,35 +13,16 @@ use VaultPHP\SecretEngines\Interfaces\ResourceRequestInterface;
 use VaultPHP\VaultClient;
 
 /**
- * Class AbstractAuthenticationProvider
- * @package VaultPHP\Authentication
+ * Class AbstractAuthenticationProvider.
  */
 abstract class AbstractAuthenticationProvider implements AuthenticationProviderInterface
 {
-    /** @var VaultClient|null */
     private ?VaultClient $vaultClient = null;
 
-    /**
-     * @param VaultClient $VaultClient
-     * @return void
-     */
     #[\Override]
     public function setVaultClient(VaultClient $VaultClient): void
     {
         $this->vaultClient = $VaultClient;
-    }
-
-    /**
-     * @throws VaultException
-     * @return VaultClient
-     */
-    private function getVaultClient(): VaultClient
-    {
-        if (!$this->vaultClient) {
-            throw new VaultException('Trying to request the VaultClient before initialization');
-        }
-
-        return $this->vaultClient;
     }
 
     /**
@@ -50,7 +32,7 @@ abstract class AbstractAuthenticationProvider implements AuthenticationProviderI
      * @throws InvalidDataException
      * @throws VaultAuthenticationException
      */
-    protected function sendApiRequest(string $method, string $endpoint, string $returnClass, ResourceRequestInterface|array $data = []): mixed
+    protected function sendApiRequest(string $method, string $endpoint, string $returnClass, array|ResourceRequestInterface $data = []): mixed
     {
         return $this->getVaultClient()->sendApiRequest(
             $method,
@@ -59,5 +41,17 @@ abstract class AbstractAuthenticationProvider implements AuthenticationProviderI
             $data,
             false,
         );
+    }
+
+    /**
+     * @throws VaultException
+     */
+    private function getVaultClient(): VaultClient
+    {
+        if (!$this->vaultClient) {
+            throw new VaultException('Trying to request the VaultClient before initialization');
+        }
+
+        return $this->vaultClient;
     }
 }

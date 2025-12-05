@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\Response;
@@ -6,20 +7,11 @@ namespace VaultPHP\Response;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Interface EndpointResponseInterface
- * @package VaultPHP\Response
+ * Interface EndpointResponseInterface.
  */
 interface EndpointResponseInterface
 {
-    /**
-     * @param ResponseInterface $response
-     * @return static
-     */
     public static function fromResponse(ResponseInterface $response): static;
 
-
-    /**
-     * @return MetaData
-     */
     public function getMetaData(): MetaData;
 }

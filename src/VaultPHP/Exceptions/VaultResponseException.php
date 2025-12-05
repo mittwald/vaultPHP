@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\Exceptions;
@@ -8,21 +9,17 @@ use Psr\Http\Message\ResponseInterface;
 use VaultPHP\Response\EndpointResponse;
 
 /**
- * Class VaultResponseException
- * @package VaultPHP\Exceptions
+ * Class VaultResponseException.
  */
 class VaultResponseException extends VaultException
 {
-    /** @var RequestInterface */
     private RequestInterface $request;
 
-    /** @var ResponseInterface */
     private ResponseInterface $response;
 
     /**
      * VaultResponseException constructor.
-     * @param ResponseInterface $response
-     * @param RequestInterface $request
+     *
      * @param \Throwable $prevException
      */
     public function __construct(ResponseInterface $response, RequestInterface $request, $prevException = null)
