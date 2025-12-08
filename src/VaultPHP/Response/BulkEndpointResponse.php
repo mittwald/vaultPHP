@@ -1,25 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\Response;
 
 use ArrayAccess;
-use Countable;
 use Iterator;
 use VaultPHP\Exceptions\VaultException;
 
 /**
- * Class BulkEndpointResponse
+ * Class BulkEndpointResponse.
  *
  * @template-implements Iterator<int>
  * @template-implements ArrayAccess<int, static>
  */
-final class BulkEndpointResponse extends EndpointResponse implements Iterator, ArrayAccess, Countable
+final class BulkEndpointResponse extends EndpointResponse implements \Iterator, \ArrayAccess, \Countable
 {
-    /** @var integer */
-    private int $iteratorPosition = 0;
-
     protected array $batch_results = [];
+    private int $iteratorPosition = 0;
 
     #[\Override]
     public function hasErrors(): bool

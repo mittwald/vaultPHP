@@ -1,20 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\Authentication;
 
 /**
- * Class AuthenticationMetaData
- * @package VaultPHP\Authentication
+ * Class AuthenticationMetaData.
  */
 final class AuthenticationMetaData
 {
-    /** @var string */
     private string $token = '';
 
     /**
      * AuthenticationMetaData constructor.
-     * @param object|null $fromAuth
      */
     public function __construct(?object $fromAuth = null)
     {
@@ -23,19 +21,13 @@ final class AuthenticationMetaData
         }
     }
 
-    /**
-     * @return string
-     */
     public function getClientToken(): string
     {
         return $this->token;
     }
 
-    /**
-     * @return bool
-     */
     public function isClientTokenPresent(): bool
     {
-        return !!$this->token;
+        return (bool) $this->token;
     }
 }

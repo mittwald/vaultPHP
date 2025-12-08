@@ -37,8 +37,9 @@ final class VaultClientTest extends TestCase
         $auth->expects($this->once())
             ->method('setVaultClient')
             ->with($this->isInstanceOf(VaultClient::class));
-        ;
+
         $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->expects($this->never())->method('sendRequest');
 
         new VaultClient($httpClient, $auth, TEST_VAULT_ENDPOINT);
     }

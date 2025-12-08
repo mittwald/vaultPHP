@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\SecretEngines\Engines\Transit\Request;
@@ -29,24 +30,14 @@ final class SignDataRequest implements ResourceRequestInterface
 
     public const string SIGNATURE_ALGORITHM_PKCS1V15 = 'pkcs1v15';
 
-    /** @var string */
-    protected string $key;
+    private string $key;
 
-    /** @var string */
-    protected string $hashAlgorithm;
+    private string $hashAlgorithm;
 
-    /** @var string */
-    protected string $input;
+    private string $input;
 
-    /** @var string */
-    protected string $signature_algorithm;
+    private string $signature_algorithm;
 
-    /**
-     * @param string $key
-     * @param string $hashAlgorithm
-     * @param string $input
-     * @param string $signature_algorithm
-     */
     public function __construct(
         string $key,
         string $hashAlgorithm,
@@ -59,31 +50,22 @@ final class SignDataRequest implements ResourceRequestInterface
         $this->signature_algorithm = $signature_algorithm;
     }
 
-    /**
-     * @return string
-     */
     public function getKey(): string
     {
         return $this->key;
     }
 
-    /**
-     * @return string
-     */
     public function getHashAlgorithm(): string
     {
         return $this->hashAlgorithm;
     }
 
-    /**
-     * @return array
-     */
     #[\Override]
     public function toArray(): array
     {
         return [
             'input' => $this->input,
-            'signature_algorithm' => $this->signature_algorithm
+            'signature_algorithm' => $this->signature_algorithm,
         ];
     }
 }

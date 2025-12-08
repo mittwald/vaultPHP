@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData;
@@ -10,21 +11,15 @@ use VaultPHP\SecretEngines\Traits\EncryptionTypeTrait;
 use VaultPHP\SecretEngines\Traits\NamedRequestTrait;
 
 /**
- * Class EncryptDataRequest
- * @package VaultPHP\SecretEngines\Transit\Request\EncryptData
+ * Class EncryptDataRequest.
  */
-final class EncryptDataRequest extends EncryptData implements
-    ResourceRequestInterface,
-    NamedRequestInterface,
-    EncryptionTypeRequestInterface
+final class EncryptDataRequest extends EncryptData implements ResourceRequestInterface, NamedRequestInterface, EncryptionTypeRequestInterface
 {
     use NamedRequestTrait;
     use EncryptionTypeTrait;
 
     /**
      * EncryptDataRequest constructor.
-     * @param string $name
-     * @param string $plaintext
      */
     public function __construct(string $name, string $plaintext)
     {

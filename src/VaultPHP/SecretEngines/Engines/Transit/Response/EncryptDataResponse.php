@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\SecretEngines\Engines\Transit\Response;
@@ -6,17 +7,12 @@ namespace VaultPHP\SecretEngines\Engines\Transit\Response;
 use VaultPHP\Response\EndpointResponse;
 
 /**
- * Class EncryptDataResponse
- * @package VaultPHP\SecretEngines\Transit\Response
+ * Class EncryptDataResponse.
  */
 final class EncryptDataResponse extends EndpointResponse
 {
-    /** @var string */
     protected string $ciphertext = '';
 
-    /**
-     * @return string
-     */
     public function getCiphertext(): string
     {
         return $this->ciphertext;

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\Authentication\Provider;
@@ -13,22 +14,17 @@ use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Response\EndpointResponse;
 
 /**
- * Class UserPassword
- * @package VaultPHP\Authentication\Provider
+ * Class UserPassword.
  */
 final class UserPassword extends AbstractAuthenticationProvider
 {
     /** @var string */
-    private string $username;
-    /** @var string */
-    private string $password;
-    /** @var string */
     public const string endpoint = '/v1/auth/userpass/login/%s';
+    private string $username;
+    private string $password;
 
     /**
      * UserPassword constructor.
-     * @param string $username
-     * @param string $password
      */
     public function __construct(string $username, string $password)
     {
@@ -54,7 +50,7 @@ final class UserPassword extends AbstractAuthenticationProvider
             $this->getAuthUrl(),
             EndpointResponse::class,
             [
-                'password' => $this->password
+                'password' => $this->password,
             ]
         );
 
@@ -65,9 +61,6 @@ final class UserPassword extends AbstractAuthenticationProvider
         return false;
     }
 
-    /**
-     * @return string
-     */
     private function getAuthUrl(): string
     {
         return sprintf($this::endpoint, urlencode($this->username));

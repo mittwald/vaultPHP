@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\Response;
@@ -9,4 +10,4 @@ final class ApiErrors
         'no existing key named .+ could be found',
         'encryption key not found',
     ];
-};
+}

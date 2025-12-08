@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VaultPHP\SecretEngines\Interfaces;
@@ -6,19 +7,11 @@ namespace VaultPHP\SecretEngines\Interfaces;
 use VaultPHP\SecretEngines\Engines\Transit\EncryptionType;
 
 /**
- * Interface EncryptionTypeRequestInterface
- * @package VaultPHP\SecretEngines\Interfaces
+ * Interface EncryptionTypeRequestInterface.
  */
 interface EncryptionTypeRequestInterface
 {
-    /**
-     * @return string|null
-     */
     public function getType(): ?string;
 
-    /**
-     * @param EncryptionType $type
-     * @return static
-     */
     public function setType(EncryptionType $type): static;
 }
