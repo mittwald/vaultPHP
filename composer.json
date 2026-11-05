@@ -16,7 +16,7 @@
     "friendsofphp/php-cs-fixer": "^v3.91.2",
     "php-http/mock-client": "^1.6.1",
     "phpunit/phpunit": "^12.5.0",
-    "vimeo/psalm": "6.x-dev"
+    "vimeo/psalm": "^6.20.9"
   },
   "authors": [
     {
