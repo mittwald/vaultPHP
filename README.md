@@ -51,7 +51,8 @@ use VaultPHP\SecretEngines\Engines\Transit\Transit;
 use GuzzleHttp\Client;
 
 // setting up independent http client - example with guzzle http client
-$httpClient = new Client(['verify' => false]);
+// TLS certificate verification is enabled by default - keep it that way
+$httpClient = new Client();
 
 // setting up desired vault strategy
 $authProvider = new Token('dummyToken');
@@ -99,6 +100,18 @@ $client = new VaultClient(
     $auth,
     'https://vault.example.com:1337'
 );
+```
+
+### TLS
+
+The Vault token is sent with every request, and login requests carry credentials such as
+AppRole secret IDs, passwords or Kubernetes service account tokens. Always connect to Vault
+via `https://` and **never disable TLS certificate verification** in your HTTP client
+(e.g. Guzzle's `'verify' => false`). If your Vault server uses a certificate issued by a
+private CA, point the client to that CA instead:
+
+```php
+$httpClient = new \GuzzleHttp\Client(['verify' => '/path/to/vault-ca.pem']);
 ```
 
 ---

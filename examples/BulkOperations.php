@@ -19,7 +19,9 @@ use GuzzleHttp\Client;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // setup http client
-$httpClient = new Client(['verify' => false]);
+// TLS certificate verification is enabled by default - never disable it ('verify' => false)
+// when talking to a remote Vault server, the Vault token is sent with every request
+$httpClient = new Client();
 
 // setup authentication provider
 $authenticationProvider = new Token('test');
@@ -76,9 +78,9 @@ try {
     var_dump($listKeyResponse->getKeys());
 
 } catch (VaultResponseException $exception) {
+    // don't dump the request/response - they can contain credentials, plaintext or secrets
     var_dump($exception->getMessage());
-    var_dump($exception->getResponse());
-    var_dump($exception->getRequest());
+    var_dump($exception->getResponse()->getStatusCode());
 
 } catch (VaultException $exception) {
     var_dump($exception->getMessage());
