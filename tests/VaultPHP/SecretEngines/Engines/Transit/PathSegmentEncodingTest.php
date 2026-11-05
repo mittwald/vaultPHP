@@ -44,9 +44,12 @@ final class PathSegmentEncodingTest extends AbstractSecretEngineTestCase
     }
 
     #[DataProvider('transitCalls')]
-    public function testDotSegmentKeyNamesAreRejectedBeforeSending(\Closure $call): void
+    public function testDotSegmentAndSlashKeyNamesAreRejectedBeforeSending(\Closure $call): void
     {
-        foreach (['', '.', '..'] as $name) {
+        // Vault decodes %2F before routing, so names with "/" must be rejected, not just encoded:
+        // "victim/rotate" would rotate the key "victim", "../../sys/mounts/transit" would reach
+        // /v1/sys/mounts/transit via Vault's redirect to the cleaned path
+        foreach (['', '.', '..', 'victim/rotate', '../keys/victim/rotate', '../../sys/mounts/transit'] as $name) {
             $httpClient = $this->createMock(ClientInterface::class);
             $httpClient->expects($this->never())->method('sendRequest');
             $api = new Transit(new VaultClient($httpClient, new Token('foo'), 'http://iDontCare.de:443'));
@@ -60,15 +63,15 @@ final class PathSegmentEncodingTest extends AbstractSecretEngineTestCase
         }
     }
 
-    public function testKeyNameCanNotTraverseThePath(): void
+    public function testKeyNameCanNotAddQueryOrFragment(): void
     {
         $client = $this->createApiClient(
             'DELETE',
-            '/v1/transit/keys/..%2F..%2Fsys%2Fmounts%2Ftransit%3Fx%3D1%23f',
+            '/v1/transit/keys/key%3Fx%3D1%23f',
             [],
             []
         );
 
-        (new Transit($client))->deleteKey('../../sys/mounts/transit?x=1#f');
+        (new Transit($client))->deleteKey('key?x=1#f');
     }
 }

@@ -140,7 +140,7 @@ final class SignDataTest extends AbstractSecretEngineTestCase
     {
         $client = $this->createApiClient(
             'POST',
-            '/v1/transit/sign/..%2F..%2Fkeys%2Fvictim%3Fx%3D1%23f/sha2-256',
+            '/v1/transit/sign/victim%3Fx%3D1%23f/sha2-256',
             [
                 'input' => 'some-input-to-sign',
                 'signature_algorithm' => 'pss'
@@ -152,19 +152,30 @@ final class SignDataTest extends AbstractSecretEngineTestCase
             ]
         );
 
-        $request = new SignDataRequest('../../keys/victim?x=1#f', SignDataRequest::HASH_ALGORITHM_SHA2_256, 'some-input-to-sign');
+        $request = new SignDataRequest('victim?x=1#f', SignDataRequest::HASH_ALGORITHM_SHA2_256, 'some-input-to-sign');
         (new Transit($client))->sign($request);
     }
 
-    public function testDotSegmentKeyNameIsRejectedBeforeSending(): void
+    public static function invalidKeyNames(): array
+    {
+        return [
+            'dot segment' => ['..'],
+            'slash' => ['victim/sha1'],
+            'traversal' => ['../../keys/victim/rotate'],
+        ];
+    }
+
+    #[DataProvider('invalidKeyNames')]
+    public function testInvalidKeyNameIsRejectedBeforeSending(string $keyName): void
     {
         $httpClient = $this->createMock(ClientInterface::class);
         $httpClient->expects($this->never())->method('sendRequest');
         $client = new VaultClient($httpClient, new Token('foo'), 'http://iDontCare.de:443');
 
         $this->expectException(VaultException::class);
+        $this->expectExceptionMessage('Invalid path segment');
 
-        $request = new SignDataRequest('..', SignDataRequest::HASH_ALGORITHM_SHA2_256, 'some-input-to-sign');
+        $request = new SignDataRequest($keyName, SignDataRequest::HASH_ALGORITHM_SHA2_256, 'some-input-to-sign');
         (new Transit($client))->sign($request);
     }
 }
