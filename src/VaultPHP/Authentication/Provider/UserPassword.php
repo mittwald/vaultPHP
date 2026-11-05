@@ -12,6 +12,7 @@ use VaultPHP\Exceptions\VaultAuthenticationException;
 use VaultPHP\Exceptions\VaultException;
 use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Response\EndpointResponse;
+use VaultPHP\Util\PathSegment;
 
 /**
  * Class UserPassword.
@@ -61,8 +62,11 @@ final class UserPassword extends AbstractAuthenticationProvider
         return false;
     }
 
+    /**
+     * @throws VaultException
+     */
     private function getAuthUrl(): string
     {
-        return sprintf($this::endpoint, urlencode($this->username));
+        return sprintf($this::endpoint, PathSegment::encode($this->username));
     }
 }

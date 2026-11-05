@@ -26,6 +26,7 @@ use VaultPHP\SecretEngines\Engines\Transit\Response\EncryptDataResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\ListKeysResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\SignDataResponse;
 use VaultPHP\SecretEngines\Engines\Transit\Response\UpdateKeyConfigResponse;
+use VaultPHP\Util\PathSegment;
 
 /**
  * Class Transit.
@@ -49,7 +50,7 @@ final class Transit extends AbstractSecretEngine
         // @var CreateKeyResponse
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/%s/keys/%s', $this->APIPath, urlencode($createKeyRequest->getName())),
+            sprintf('/v1/%s/keys/%s', $this->APIPath, PathSegment::encode($createKeyRequest->getName())),
             CreateKeyResponse::class,
             $createKeyRequest
         );
@@ -65,7 +66,7 @@ final class Transit extends AbstractSecretEngine
         // @var EncryptDataResponse
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/%s/encrypt/%s', $this->APIPath, urlencode($encryptDataRequest->getName())),
+            sprintf('/v1/%s/encrypt/%s', $this->APIPath, PathSegment::encode($encryptDataRequest->getName())),
             EncryptDataResponse::class,
             $encryptDataRequest
         );
@@ -81,7 +82,7 @@ final class Transit extends AbstractSecretEngine
         // @var BulkEndpointResponse
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/%s/encrypt/%s', $this->APIPath, urlencode($encryptDataBulkRequest->getName())),
+            sprintf('/v1/%s/encrypt/%s', $this->APIPath, PathSegment::encode($encryptDataBulkRequest->getName())),
             EncryptDataResponse::class,
             $encryptDataBulkRequest
         );
@@ -97,7 +98,7 @@ final class Transit extends AbstractSecretEngine
         // @var DecryptDataResponse
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/%s/decrypt/%s', $this->APIPath, urlencode($decryptDataRequest->getName())),
+            sprintf('/v1/%s/decrypt/%s', $this->APIPath, PathSegment::encode($decryptDataRequest->getName())),
             DecryptDataResponse::class,
             $decryptDataRequest
         );
@@ -115,7 +116,7 @@ final class Transit extends AbstractSecretEngine
         // @var BulkEndpointResponse
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/%s/decrypt/%s', $this->APIPath, urlencode($decryptDataBulkRequest->getName())),
+            sprintf('/v1/%s/decrypt/%s', $this->APIPath, PathSegment::encode($decryptDataBulkRequest->getName())),
             DecryptDataResponse::class,
             $decryptDataBulkRequest
         );
@@ -147,7 +148,7 @@ final class Transit extends AbstractSecretEngine
         // @var EndpointResponse
         return $this->vaultClient->sendApiRequest(
             'DELETE',
-            sprintf('/v1/%s/keys/%s', $this->APIPath, urlencode($name)),
+            sprintf('/v1/%s/keys/%s', $this->APIPath, PathSegment::encode($name)),
             DeleteKeyResponse::class,
             []
         );
@@ -163,7 +164,7 @@ final class Transit extends AbstractSecretEngine
         // @var UpdateKeyConfigResponse
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/%s/keys/%s/config', $this->APIPath, urlencode($updateKeyConfigRequest->getName())),
+            sprintf('/v1/%s/keys/%s/config', $this->APIPath, PathSegment::encode($updateKeyConfigRequest->getName())),
             UpdateKeyConfigResponse::class,
             $updateKeyConfigRequest
         );
@@ -178,7 +179,7 @@ final class Transit extends AbstractSecretEngine
     {
         return $this->vaultClient->sendApiRequest(
             'POST',
-            sprintf('/v1/%s/sign/%s/%s', $this->APIPath, urlencode($signDataRequest->getKey()), $signDataRequest->getHashAlgorithm()),
+            sprintf('/v1/%s/sign/%s/%s', $this->APIPath, PathSegment::encode($signDataRequest->getKey()), PathSegment::encode($signDataRequest->getHashAlgorithm())),
             SignDataResponse::class,
             $signDataRequest
         );
