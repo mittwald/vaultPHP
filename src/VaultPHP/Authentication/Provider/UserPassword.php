@@ -27,10 +27,23 @@ final class UserPassword extends AbstractAuthenticationProvider
     /**
      * UserPassword constructor.
      */
-    public function __construct(string $username, string $password)
+    public function __construct(string $username, #[\SensitiveParameter] string $password)
     {
         $this->username = $username;
         $this->password = $password;
+    }
+
+    /**
+     * Keeps the password out of var_dump()/print_r() output.
+     *
+     * @return array<string, string>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'username' => $this->username,
+            'password' => '[REDACTED]',
+        ];
     }
 
     /**

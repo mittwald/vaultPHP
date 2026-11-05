@@ -23,14 +23,14 @@ class EncryptData implements ArrayExportInterface
     /**
      * EncryptData constructor.
      */
-    public function __construct(string $plaintext, ?string $context = null, ?string $nonce = null)
+    public function __construct(#[\SensitiveParameter] string $plaintext, ?string $context = null, ?string $nonce = null)
     {
         $this->setPlaintext($plaintext);
         $this->setContext($context);
         $this->setNonce($nonce);
     }
 
-    public function setPlaintext(string $plaintext): static
+    public function setPlaintext(#[\SensitiveParameter] string $plaintext): static
     {
         $this->plaintext = base64_encode($plaintext);
 

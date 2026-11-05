@@ -21,7 +21,7 @@ final class EncryptDataRequest extends EncryptData implements ResourceRequestInt
     /**
      * EncryptDataRequest constructor.
      */
-    public function __construct(string $name, string $plaintext)
+    public function __construct(string $name, #[\SensitiveParameter] string $plaintext)
     {
         parent::__construct($plaintext);
         $this->setName($name);

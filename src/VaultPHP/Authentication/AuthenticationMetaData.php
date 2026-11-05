@@ -14,11 +14,23 @@ final class AuthenticationMetaData
     /**
      * AuthenticationMetaData constructor.
      */
-    public function __construct(?object $fromAuth = null)
+    public function __construct(#[\SensitiveParameter] ?object $fromAuth = null)
     {
         if ($fromAuth) {
             $this->token = (string) $fromAuth->client_token;
         }
+    }
+
+    /**
+     * Keeps the client token out of var_dump()/print_r() output.
+     *
+     * @return array<string, string>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'token' => $this->isClientTokenPresent() ? '[REDACTED]' : '',
+        ];
     }
 
     public function getClientToken(): string

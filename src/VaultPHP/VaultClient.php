@@ -54,6 +54,7 @@ final class VaultClient
         string $method,
         string $endpoint,
         string $returnClass,
+        #[\SensitiveParameter]
         array|ResourceRequestInterface $data = [],
         bool $authRequired = true
     ): mixed {
@@ -103,7 +104,7 @@ final class VaultClient
         }
     }
 
-    private function extractPayload(array|ArrayExportInterface $data): string
+    private function extractPayload(#[\SensitiveParameter] array|ArrayExportInterface $data): string
     {
         if ($data instanceof ArrayExportInterface) {
             $data = $data->toArray();
@@ -125,6 +126,7 @@ final class VaultClient
      * @throws VaultResponseException
      */
     private function parseResponse(
+        #[\SensitiveParameter]
         RequestInterface $request,
         ResponseInterface $response,
         string $returnClass,
@@ -196,7 +198,7 @@ final class VaultClient
      * @throws VaultException
      * @throws VaultHttpException
      */
-    private function sendRequest(RequestInterface $request): ResponseInterface
+    private function sendRequest(#[\SensitiveParameter] RequestInterface $request): ResponseInterface
     {
         $requestWithDefaults = $this->getDefaultRequest($request);
 
@@ -212,7 +214,7 @@ final class VaultClient
      *
      * @throws VaultException
      */
-    private function getDefaultRequest(RequestInterface $request): RequestInterface
+    private function getDefaultRequest(#[\SensitiveParameter] RequestInterface $request): RequestInterface
     {
         $token = $this->authenticationMetaData ? $this->authenticationMetaData->getClientToken() : '';
         $hostEndpoint = parse_url($this->apiHost);
