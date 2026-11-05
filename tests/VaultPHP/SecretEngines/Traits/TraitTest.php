@@ -11,6 +11,8 @@ use VaultPHP\SecretEngines\Engines\Transit\EncryptionType;
 use VaultPHP\SecretEngines\Engines\Transit\Request\CreateKeyRequest;
 use VaultPHP\SecretEngines\Engines\Transit\Request\DecryptData\DecryptData;
 use VaultPHP\SecretEngines\Engines\Transit\Request\DecryptData\DecryptDataBulkRequest;
+use VaultPHP\SecretEngines\Engines\Transit\Request\EncryptData\EncryptData;
+use VaultPHP\SecretEngines\Engines\Transit\Request\UpdateKeyConfigRequest;
 
 /**
  * Class TraitTest
@@ -70,5 +72,23 @@ class TraitTest extends TestCase
         ];
         $this->assertEquals($expectedArray, $request->toArray());
         $this->assertEquals('fooTest', $request->getName());
+    }
+
+    public function testOnlyNullValuesAreDroppedFromExport(): void
+    {
+        $request = new UpdateKeyConfigRequest('fooTest');
+        $request->setDeletionAllowed(false);
+        $request->setMinEncryptionVersion(0);
+
+        $this->assertSame(
+            [
+                'min_encryption_version' => 0,
+                'deletion_allowed' => false,
+                'name' => 'fooTest',
+            ],
+            $request->toArray()
+        );
+
+        $this->assertSame(['plaintext' => ''], (new EncryptData(''))->toArray());
     }
 }
