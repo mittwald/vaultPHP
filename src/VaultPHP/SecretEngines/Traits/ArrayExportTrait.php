@@ -26,7 +26,9 @@ trait ArrayExportTrait
             $data
         );
 
-        return array_filter($result);
+        // only drop unset (null) values - false, 0 and '' are meaningful
+        // for vault (e.g. deletion_allowed=false, min_encryption_version=0)
+        return array_filter($result, static fn (mixed $value): bool => null !== $value);
     }
 
     private function array_map_r(callable $callback, array $input): array

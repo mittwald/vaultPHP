@@ -32,8 +32,13 @@ abstract class AbstractAuthenticationProvider implements AuthenticationProviderI
      * @throws InvalidDataException
      * @throws VaultAuthenticationException
      */
-    protected function sendApiRequest(string $method, string $endpoint, string $returnClass, array|ResourceRequestInterface $data = []): mixed
-    {
+    protected function sendApiRequest(
+        string $method,
+        string $endpoint,
+        string $returnClass,
+        #[\SensitiveParameter]
+        array|ResourceRequestInterface $data = [],
+    ): mixed {
         return $this->getVaultClient()->sendApiRequest(
             $method,
             $endpoint,

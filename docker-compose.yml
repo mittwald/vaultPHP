@@ -1,11 +1,14 @@
+# Local development only: starts an in-memory, unsealed Vault dev server
+# without TLS. The root token below is a fixed, well-known dev token, so the
+# port is published on the loopback interface only and the container is not
+# restarted automatically. Never use this setup for real secrets.
 version: "3"
 services:
   vault:
-    image: hashicorp/vault:latest
+    image: hashicorp/vault:2.2.1
     container_name: vault
-    restart: unless-stopped
     ports:
-      - "8200:8200"
+      - "127.0.0.1:8200:8200"
     environment:
       VAULT_ADDR: 'http://0.0.0.0:8200'
       VAULT_DEV_ROOT_TOKEN_ID: 'test'

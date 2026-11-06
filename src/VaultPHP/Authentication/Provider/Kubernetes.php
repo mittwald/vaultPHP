@@ -27,11 +27,25 @@ final class Kubernetes extends AbstractAuthenticationProvider
      *
      * @param string $authPath - defaults to '/auth/kubernetes'
      */
-    public function __construct(string $role, string $jwt, string $authPath = 'auth/kubernetes')
+    public function __construct(string $role, #[\SensitiveParameter] string $jwt, string $authPath = 'auth/kubernetes')
     {
         $this->role = $role;
         $this->jwt = $jwt;
         $this->endpoint = '/v1/'.$authPath.'/login';
+    }
+
+    /**
+     * Keeps the service account token out of var_dump()/print_r() output.
+     *
+     * @return array<string, string>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'role' => $this->role,
+            'jwt' => '[REDACTED]',
+            'endpoint' => $this->endpoint,
+        ];
     }
 
     /**

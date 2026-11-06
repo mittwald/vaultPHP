@@ -1,0 +1,9 @@
+version: 2
+updates:
+  # keeps the commit SHA pins in .github/workflows up to date
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7

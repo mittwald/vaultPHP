@@ -27,10 +27,23 @@ final class AppRole extends AbstractAuthenticationProvider
     /**
      * AppRole constructor.
      */
-    public function __construct(string $roleId, string $secretId)
+    public function __construct(#[\SensitiveParameter] string $roleId, #[\SensitiveParameter] string $secretId)
     {
         $this->roleId = $roleId;
         $this->secretId = $secretId;
+    }
+
+    /**
+     * Keeps the credentials out of var_dump()/print_r() output.
+     *
+     * @return array<string, string>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'roleId' => '[REDACTED]',
+            'secretId' => '[REDACTED]',
+        ];
     }
 
     /**

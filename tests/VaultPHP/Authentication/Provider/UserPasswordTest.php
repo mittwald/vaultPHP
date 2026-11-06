@@ -50,6 +50,43 @@ final class UserPasswordTest extends TestCase
         $this->assertEquals('{"password":"bar"}',  $request->getBody()->getContents());
     }
 
+    public function testUsernameIsEncodedAsSinglePathSegment(): void
+    {
+        $userPasswordAuth = new UserPassword('foo@example?x#y', 'bar');
+
+        $httpClient = new Client();
+        $httpClient->addResponse(new Response(200, [], json_encode([
+            'auth' => [
+                'client_token' => 'fooToken',
+            ],
+        ])));
+        new VaultClient($httpClient, $userPasswordAuth, "https://mocked:1337");
+
+        $userPasswordAuth->authenticate();
+
+        $this->assertEquals(
+            "/v1/auth/userpass/login/foo%40example%3Fx%23y",
+            $httpClient->getLastRequest()->getUri()->getPath()
+        );
+    }
+
+    public function testUsernameWithSlashIsRejectedBeforeSending(): void
+    {
+        $userPasswordAuth = new UserPassword('../../token/create', 'bar');
+
+        $httpClient = new Client();
+        new VaultClient($httpClient, $userPasswordAuth, "https://mocked:1337");
+
+        try {
+            $userPasswordAuth->authenticate();
+            $this->fail('username with "/" was not rejected');
+        } catch (VaultException $e) {
+            $this->assertStringContainsString('Invalid path segment', $e->getMessage());
+        }
+
+        $this->assertCount(0, $httpClient->getRequests());
+    }
+
     public function testWillReturnNothingWhenTokenReceiveFails(): void
     {
         $userPasswordAuth = new UserPassword('foo', 'bar');

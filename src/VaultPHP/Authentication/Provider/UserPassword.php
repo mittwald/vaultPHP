@@ -12,6 +12,7 @@ use VaultPHP\Exceptions\VaultAuthenticationException;
 use VaultPHP\Exceptions\VaultException;
 use VaultPHP\Exceptions\VaultHttpException;
 use VaultPHP\Response\EndpointResponse;
+use VaultPHP\Util\PathSegment;
 
 /**
  * Class UserPassword.
@@ -26,10 +27,23 @@ final class UserPassword extends AbstractAuthenticationProvider
     /**
      * UserPassword constructor.
      */
-    public function __construct(string $username, string $password)
+    public function __construct(string $username, #[\SensitiveParameter] string $password)
     {
         $this->username = $username;
         $this->password = $password;
+    }
+
+    /**
+     * Keeps the password out of var_dump()/print_r() output.
+     *
+     * @return array<string, string>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'username' => $this->username,
+            'password' => '[REDACTED]',
+        ];
     }
 
     /**
@@ -61,8 +75,11 @@ final class UserPassword extends AbstractAuthenticationProvider
         return false;
     }
 
+    /**
+     * @throws VaultException
+     */
     private function getAuthUrl(): string
     {
-        return sprintf($this::endpoint, urlencode($this->username));
+        return sprintf($this::endpoint, PathSegment::encode($this->username));
     }
 }

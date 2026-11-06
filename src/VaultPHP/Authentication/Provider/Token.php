@@ -17,9 +17,21 @@ final class Token extends AbstractAuthenticationProvider
     /**
      * Token constructor.
      */
-    public function __construct(string $token)
+    public function __construct(#[\SensitiveParameter] string $token)
     {
         $this->token = $token;
+    }
+
+    /**
+     * Keeps the token out of var_dump()/print_r() output.
+     *
+     * @return array<string, string>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'token' => '[REDACTED]',
+        ];
     }
 
     #[\Override]
